@@ -1,7 +1,7 @@
 {
   "require": {
     "php": ">=7.2",
-    "php-aesirx/aesirx_analytics_lib": "dev-master",
+    "aesirx/aesirx_analytics_lib": "dev-master",
     "guzzlehttp/guzzle": "^7.8",
     "symfony/deprecation-contracts": "^2.2"
   },

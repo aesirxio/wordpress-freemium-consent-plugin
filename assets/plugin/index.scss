@@ -164,7 +164,6 @@
           display: flex;
           flex-wrap: wrap;
           padding-right: 40px;
-          margin-top: 40px;
           input {
             width: 100%;
           }
@@ -325,7 +324,7 @@
     width: auto;
   }
 }
-.reset_consent_note{
+.reset_consent_note {
   margin-top: 5px;
   font-style: italic;
 }
@@ -413,7 +412,6 @@
   }
 }
 .aesirx_consent_info,
-.aesirx_consent_register_license,
 .aesirx_consent_scanner {
   background: #fff;
   padding: 32px;
@@ -487,32 +485,6 @@
     margin-left: 4px;
   }
 }
-.aesirx_consent_register_license {
-  p {
-    font-size: 16px;
-  }
-  img {
-    margin: 0 auto;
-    display: block;
-  }
-  button,
-  a {
-    img {
-      margin-left: 4px;
-      margin-right: 0;
-    }
-  }
-}
-.aesirx_consent_register_license_notice {
-  color: #ff3b30;
-  font-size: 18px;
-  margin-top: 16px;
-  margin-bottom: 24px;
-  a {
-    color: #ff3b30;
-    word-break: break-all;
-  }
-}
 .aesirx_heading {
   font-size: 28px;
   font-weight: 700;
@@ -570,31 +542,6 @@ input.aesirx_consent_input {
   background: #000;
   opacity: 0.4;
   z-index: 1;
-}
-.aesirx_signup_modal {
-  display: none;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 800px;
-  height: 800px;
-  z-index: 2;
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  &.show {
-    display: block;
-  }
-  .aesirx_signup_modal_body {
-    width: 100%;
-    height: 100%;
-    iframe {
-      width: 100%;
-      height: 100%;
-      border-radius: 10px;
-    }
-  }
 }
 .text-link {
   cursor: pointer;

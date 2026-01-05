@@ -1,13 +1,13 @@
 === AesirX Consent ===
 Contributors: aesirx,vikingtechguy,nixa999,nguyenbao10,vietnguyen1406,devphutran
-Tags: privacy, analytics, compliance, wordpress analytics, consent
+Tags: privacy, compliance, wordpress consent, consent
 Requires at least: 5.9
-Tested up to: 6.7.1
-Stable tag: 2.0.3
+Tested up to: 6.9
+Stable tag: 1.0.0
 Requires PHP: 7.4
 License: GPL 3.0
 
-Enhance website tracking with AesirX Analytics WordPress plugin, integrating first-party analytics and consent for GDPR/ePrivacy compliance.
+Integrating first-party consent for GDPR/ePrivacy compliance.
 
 == Description ==
 
@@ -27,7 +27,6 @@ AesirX Consent' mission is to deliver prioritizing user privacy and consent.
 
 * **Consent Management:** Advanced tools for managing user consent and privacy preferences.
 * **Seamless WordPress Integration:** Effortless setup and configuration within the WordPress platform.
-* **First-Party Analytics:** Ensures data is collected and stored without third-party interference.
 
 = 3rd party services =
 
@@ -48,50 +47,5 @@ The Terms of service can be found here https://aesirx.io/terms-conditions and th
 
 == Changelog ==
 
-= 2.0.3 =
-* Fix consent region API
-
-= 2.0.2 =
-* Permanent Block
-
-= 2.0.1 =
-* zKP CyptoX Wallet
-
-= 2.0.0 =
-* Age & Country Verification
-
-= 1.9.0 =
-* AI Privacy Generator
-* 8 More Languages: MY, SL, LT, ET, IS, AZ, KA, LV
-
-= 1.8.0 =
-* Consent Analytics
-* 8 More Languages: BG, SK, UA, HR, HI, ZH-HK, SR, TL
-
-= 1.7.0 =
-* Regional Handling: Multi-Language and Time Zone-Aware Consent Logic
-* 8 More Languages: FI, RO, HU, ID, HE, CS, EL, MS
-* Privacy Scanner Menu
-
-= 1.6.0 =
-* Configurable Consent Logic: Opt-In / Opt-Out Control
-* 8 More Languages: PT, IT, JA, PL, TR, AR, TH, KO
-* Rearrange menu
-
-= 1.5.0 =
-* Consent Log, Customize Detail & Reject content
-
-= 1.4.0 =
-* GPC Support
-
-= 1.3.0 =
-* Category-base consent
-
-= 1.2.0 =
-* Fix error, warning with phpcs check list
-
-= 1.1.0 =
-* Customize Consent Text
-
 = 1.0.0 =
-* AesirX Consent
+* AesirX Freemium Consent

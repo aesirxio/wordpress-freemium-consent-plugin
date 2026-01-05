@@ -3,7 +3,7 @@
  * Plugin Name: AesirX Consent
  * Plugin URI: https://analytics.aesirx.io?utm_source=wpplugin&utm_medium=web&utm_campaign=wordpress&utm_id=aesirx&utm_term=wordpress&utm_content=analytics
  * Description: Aesirx Consent plugin. When you join forces with AesirX, you're not just becoming a Partner - you're also becoming a freedom fighter in the battle for privacy! Earn 25% Affiliate Commission <a href="https://aesirx.io/partner?utm_source=wpplugin&utm_medium=web&utm_campaign=wordpress&utm_id=aesirx&utm_term=wordpress&utm_content=analytics">[Click to Join]</a>
- * Version: 2.0.3
+ * Version: 1.0.0
  * Author: aesirx.io
  * Author URI: https://aesirx.io/
  * Domain Path: /languages
@@ -31,6 +31,8 @@ require_once plugin_dir_path(__FILE__) . 'includes/settings.php';
 
 include_once(ABSPATH . 'wp-admin/includes/plugin.php');
 
+define('AESIRX_PLUGIN_BASE_PATH', WP_PLUGIN_DIR . '/aesirx-consent');
+
 add_action('wp_enqueue_scripts', function (): void {
     $options = get_option('aesirx_analytics_plugin_options');
     $optionsConsentVerify = get_option('aesirx_consent_verify_plugin_options', []);
@@ -57,7 +59,7 @@ add_action('wp_enqueue_scripts', function (): void {
         $scriptFile = 'assets/vendor/consent.js';
     }
 
-    wp_register_script('aesirx-consent', plugins_url($scriptFile, __FILE__), [], '2.0.3',  array(
+    wp_register_script('aesirx-consent', plugins_url($scriptFile, __FILE__), [], '1.0.0',  array(
         'in_footer' => false,
     ));
     $translation_array = array(
