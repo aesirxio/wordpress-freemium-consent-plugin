@@ -1,8 +1,8 @@
 <?php
-
+if ( ! defined( 'ABSPATH' ) ) exit;
 global $wpdb;
 
-$sql = [];
+$aesirx_analytics_sql = [];
 
 // Prepare the SQL query to change the column type and default value
-$sql[] = "ALTER TABLE `{$wpdb->prefix}analytics_wallet` CHANGE `nonce` `nonce` VARCHAR(255) NULL DEFAULT NULL;";
+$aesirx_analytics_sql[] = "ALTER TABLE `{$wpdb->prefix}analytics_wallet` CHANGE `nonce` `nonce` VARCHAR(255) NULL DEFAULT NULL;";

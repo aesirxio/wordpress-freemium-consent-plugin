@@ -1,11 +1,11 @@
 <?php
-
+if ( ! defined( 'ABSPATH' ) ) exit;
 global $wpdb;
 
-$sql = [];
+$aesirx_analytics_sql = [];
 
 // Prepare the query with placeholders
-$sql[] = $wpdb->prepare(
+$aesirx_analytics_sql[] = $wpdb->prepare(
     "UPDATE `{$wpdb->prefix}analytics_visitors` 
     SET domain = SUBSTRING(domain, LOCATE(%s, domain) + LENGTH(%s)) 
     WHERE domain LIKE %s;",

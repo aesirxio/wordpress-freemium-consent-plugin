@@ -1,11 +1,11 @@
 <?php
-
+if ( ! defined( 'ABSPATH' ) ) exit;
 global $wpdb;
 
-$sql = [];
+$aesirx_analytics_sql = [];
 
 // Create analytics_wallet table
-$sql[] = "
+$aesirx_analytics_sql[] = "
     CREATE TABLE `{$wpdb->prefix}analytics_wallet` (
         `uuid` char(36) NOT NULL,
         `network` varchar(255) NOT NULL,
@@ -15,7 +15,7 @@ $sql[] = "
     ) ENGINE=InnoDB;";
 
 // Create analytics_consent table
-$sql[] = "
+$aesirx_analytics_sql[] = "
     CREATE TABLE `{$wpdb->prefix}analytics_consent` (
         `uuid` char(36) NOT NULL,
         `wallet_uuid` char(36) DEFAULT NULL,
@@ -29,7 +29,7 @@ $sql[] = "
     ) ENGINE=InnoDB;";
 
 // Create analytics_visitor_consent table
-$sql[] = "
+$aesirx_analytics_sql[] = "
     CREATE TABLE `{$wpdb->prefix}analytics_visitor_consent` (
         `uuid` char(36) NOT NULL,
         `visitor_uuid` char(36) NOT NULL,

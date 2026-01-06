@@ -3,7 +3,7 @@
 namespace AesirxAnalytics;
 
 use WP_Error;
-
+if ( ! defined( 'ABSPATH' ) ) exit;
 if (!class_exists('AesirxAnalyticsMysqlHelper')) {
     Class AesirxAnalyticsMysqlHelper
     {
@@ -21,7 +21,7 @@ if (!class_exists('AesirxAnalyticsMysqlHelper')) {
 
             // used placeholders and $wpdb->prepare() in variable $total_sql
             // doing direct database calls to custom tables
-            $total_elements = (int) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            $total_elements = (int) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
                 $wpdb->prepare($total_sql, $bind) // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
             );
            
@@ -40,7 +40,7 @@ if (!class_exists('AesirxAnalyticsMysqlHelper')) {
                     } else {
                         // used placeholders and $wpdb->prepare() in variable $sql
                         // doing direct database calls to custom tables
-                        $collection = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,
+                        $collection = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, PluginCheck.Security.DirectDB.UnescapedDBParameter
                             $wpdb->prepare($sql, $bind) // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
                             , ARRAY_A
                         );
@@ -63,7 +63,7 @@ if (!class_exists('AesirxAnalyticsMysqlHelper')) {
                         wp_cache_set( $key, $collection, $group, $options['cache_time'] );
                     }
                 } else {
-                    $collection = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,
+                    $collection = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, PluginCheck.Security.DirectDB.UnescapedDBParameter
                         $wpdb->prepare($sql, $bind) // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
                         , ARRAY_A
                     );

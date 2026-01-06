@@ -662,7 +662,15 @@ add_action('admin_init', function () {
           <li>'.esc_html__('Download the gpc.json file.', 'aesirx-consent').'</li>
           <li>'.esc_html__('Connect to your website via FTP or File Manager.', 'aesirx-consent').'</li>
           <li>'.sprintf(__('Upload the file to: <code>/public_html/.well-known/gpc.json</code>', 'aesirx-consent')).'</li>
-          <li>'.sprintf(__("Ensure the file is accessible by visiting: <a href='" . get_site_url() . "/.well-known/gpc.json' target='_blank'>" . get_site_url() . "/.well-known/gpc.json</a>", 'aesirx-consent')).'</li>
+          <li>' . sprintf(
+              /* translators: 1: URL to the gpc.json file (href attribute), 2: URL displayed as link text. */
+              __(
+                  'Ensure the file is accessible by visiting: <a href="%1$s" target="_blank">%2$s</a>',
+                  'aesirx-consent'
+              ),
+              esc_url( get_site_url() . '/.well-known/gpc.json' ),
+              esc_html( get_site_url() . '/.well-known/gpc.json' )
+          ) . '</li>
       </ol>', aesirx_analytics_escape_html());
       echo wp_kses('<h3 class="mb-10">Privacy Policy Update</h3>', aesirx_analytics_escape_html());
       echo wp_kses('<p class="small-description mb-10">You must update your Privacy Policy to reflect GPC compliance. Below is a suggested update:</p>', aesirx_analytics_escape_html());
@@ -805,7 +813,7 @@ add_action('admin_init', function () {
         'no' => 'No',
       ];
 
-      function render_select($name, $values, $selected = '', $placeholder = null, $allowPlaceholder = false) {
+      function aesirx_analytics_render_select($name, $values, $selected = '', $placeholder = null, $allowPlaceholder = false) {
         $html = "<select name='{$name}'>";
         if ($placeholder) {
           $html .= "<option value='' ".($allowPlaceholder ? '' : 'disabled hidden')." ".($selected === '' ? 'selected' : '').">{$placeholder}</option>";
@@ -855,11 +863,11 @@ add_action('admin_init', function () {
         foreach ($options['geo_rules_language'] as $key => $field) {
           echo wp_kses(
             '<div class="aesirx-consent-rule-row">'
-              . '<div>' . render_select('aesirx_consent_geo_plugin_options[geo_rules_language][]', $languages, $field, '-- '.esc_html__('Language', 'aesirx-consent').'') . '</div>'
-              . '<div>' . render_select('aesirx_consent_geo_plugin_options[geo_rules_timezone][]', $timezones, $options['geo_rules_timezone'][$key], '-- '.esc_html__('Time Zone', 'aesirx-consent').'', true) . '</div>'
-              . '<div>' . render_select('aesirx_consent_geo_plugin_options[geo_rules_logic][]', $logics, $options['geo_rules_logic'][$key],'-- AND/OR') . '</div>'
-              . '<div>' . render_select('aesirx_consent_geo_plugin_options[geo_rules_consent_mode][]', $modes, $options['geo_rules_consent_mode'][$key],'-- '.esc_html__('Select Mode', 'aesirx-consent').'', true) . '</div>'
-              . '<div>' . render_select('aesirx_consent_geo_plugin_options[geo_rules_override][]', $overrides, $options['geo_rules_override'][$key],'-- Override') . '</div>'
+              . '<div>' . aesirx_analytics_render_select('aesirx_consent_geo_plugin_options[geo_rules_language][]', $languages, $field, '-- '.esc_html__('Language', 'aesirx-consent').'') . '</div>'
+              . '<div>' . aesirx_analytics_render_select('aesirx_consent_geo_plugin_options[geo_rules_timezone][]', $timezones, $options['geo_rules_timezone'][$key], '-- '.esc_html__('Time Zone', 'aesirx-consent').'', true) . '</div>'
+              . '<div>' . aesirx_analytics_render_select('aesirx_consent_geo_plugin_options[geo_rules_logic][]', $logics, $options['geo_rules_logic'][$key],'-- AND/OR') . '</div>'
+              . '<div>' . aesirx_analytics_render_select('aesirx_consent_geo_plugin_options[geo_rules_consent_mode][]', $modes, $options['geo_rules_consent_mode'][$key],'-- '.esc_html__('Select Mode', 'aesirx-consent').'', true) . '</div>'
+              . '<div>' . aesirx_analytics_render_select('aesirx_consent_geo_plugin_options[geo_rules_override][]', $overrides, $options['geo_rules_override'][$key],'-- Override') . '</div>'
               . '<div>
                   <button class="aesirx-consent-remove-rules-row">
                     <img width="25px" height="30px" src="' . plugins_url('aesirx-consent/assets/images-plugin/trash_icon.png') . '" />
@@ -872,11 +880,11 @@ add_action('admin_init', function () {
       } else {
         echo wp_kses(
           '<div class="aesirx-consent-rule-row">'
-            . '<div>' . render_select('aesirx_consent_geo_plugin_options[geo_rules_language][]', $languages, '', '-- '.esc_html__('Language', 'aesirx-consent').'') . '</div>'
-            . '<div>' . render_select('aesirx_consent_geo_plugin_options[geo_rules_timezone][]', $timezones, '', '-- '.esc_html__('Time Zone', 'aesirx-consent').'', true) . '</div>'
-            . '<div>' . render_select('aesirx_consent_geo_plugin_options[geo_rules_logic][]', $logics, '', '-- AND/OR') . '</div>'
-            . '<div>' . render_select('aesirx_consent_geo_plugin_options[geo_rules_consent_mode][]', $modes, '', '-- '.esc_html__('Select Mode', 'aesirx-consent').'', true) . '</div>'
-            . '<div>' . render_select('aesirx_consent_geo_plugin_options[geo_rules_override][]', $overrides, '', '-- '.esc_html__('Override', 'aesirx-consent').'') . '</div>'
+            . '<div>' . aesirx_analytics_render_select('aesirx_consent_geo_plugin_options[geo_rules_language][]', $languages, '', '-- '.esc_html__('Language', 'aesirx-consent').'') . '</div>'
+            . '<div>' . aesirx_analytics_render_select('aesirx_consent_geo_plugin_options[geo_rules_timezone][]', $timezones, '', '-- '.esc_html__('Time Zone', 'aesirx-consent').'', true) . '</div>'
+            . '<div>' . aesirx_analytics_render_select('aesirx_consent_geo_plugin_options[geo_rules_logic][]', $logics, '', '-- AND/OR') . '</div>'
+            . '<div>' . aesirx_analytics_render_select('aesirx_consent_geo_plugin_options[geo_rules_consent_mode][]', $modes, '', '-- '.esc_html__('Select Mode', 'aesirx-consent').'', true) . '</div>'
+            . '<div>' . aesirx_analytics_render_select('aesirx_consent_geo_plugin_options[geo_rules_override][]', $overrides, '', '-- '.esc_html__('Override', 'aesirx-consent').'') . '</div>'
             . '<div>
                 <button class="aesirx-consent-remove-rules-row">
                   <img width="25px" height="30px" src="' . plugins_url('aesirx-consent/assets/images-plugin/trash_icon.png') . '" />
@@ -1315,12 +1323,26 @@ add_action('admin_init', function () {
             </div>
             <div class='check_line'>
               <img class='check_radio' width='14px' height='14px' src='". plugins_url( 'aesirx-consent/assets/images-plugin/check_radio.png')."' />
-              <div>
-                ".sprintf(__("To comply with the law, we need to verify your <span class='".($showPreview === 'default' ? "updateable" : "")." age_country_text'>%1\$s</span> before granting you access.", 'aesirx-consent'), 
-                    ($showPreview === 'age-country'
+              <div>".sprintf(
+                /* translators: 1: CSS class attribute for span, 2: text describing what is being verified (age, country, or age & country). */
+                __(
+                  'To comply with the law, we need to verify your <span class="%1$s">%2$s</span> before granting you access.',
+                  'aesirx-consent'
+                ),
+                esc_attr(
+                  ( $showPreview === 'default' ? 'updateable ' : '' ) . 'age_country_text'
+                ),
+                esc_html(
+                  $showPreview === 'age-country'
                       ? 'age & country'
-                      : ($showPreview === 'age' ? 'age' : ($showPreview === 'country' ? 'country' : '[age] / [country] / [age & country]')))
-                  )."
+                      : ( $showPreview === 'age'
+                          ? 'age'
+                          : ( $showPreview === 'country'
+                              ? 'country'
+                              : '[age] / [country] / [age & country]'
+                          )
+                      )
+                ))."
               </div>
             </div>
             <div class='check_line'>
@@ -1562,21 +1584,6 @@ add_action('admin_enqueue_scripts', function ($hook) {
     wp_register_script('aesirx_analytics_verify', plugins_url('assets/vendor/aesirx-consent-verify.js', __DIR__), array('jquery'), false, true);
     wp_enqueue_script('aesirx_analytics_verify');
   }
-  if ($hook === "aesirx-cmp_page_aesirx-cmp-ai") {
-    wp_enqueue_script('aesirx_analytics_marked', plugins_url('assets/vendor/aesirx-consent-marked.js', __DIR__), array('jquery'), true, true);
-    wp_register_script('aesirx_analytics_ai', plugins_url('assets/vendor/aesirx-consent-ai.js', __DIR__), array('jquery'), false, true);
-    $optionsAI = get_option('aesirx_consent_ai_plugin_options', []);
-    wp_localize_script('aesirx_analytics_ai', 'aesirx_ajax', [
-      'ajax_url' => admin_url('admin-ajax.php'),
-      'nonce' => wp_create_nonce('aesirx_consent_nonce'),
-      'thread_id' =>  $optionsAI['thread_id'] ?? '',
-      'cookie_declaration' =>  $optionsAI['cookie_declaration'] ?? '',
-      'privacy_policy' =>  $optionsAI['privacy_policy'] ?? '',
-      'consent_request' =>  $optionsAI['consent_request'] ?? '',
-      'domain_categorization' =>  $optionsAI['domain_categorization'] ?? ''
-  ]);
-    wp_enqueue_script('aesirx_analytics_ai');
-  }
   if ($hook === 'toplevel_page_aesirx-consent-management-plugin' || $hook === "aesirx-cmp_page_aesirx-cmp-modal") {
     wp_enqueue_script('aesirx_analytics_ckeditor', plugins_url('assets/vendor/aesirx-consent-ckeditor.js', __DIR__), array('jquery'), true, true);
     wp_enqueue_script('aesirx_analytics_select2', plugins_url('assets/vendor/aesirx-consent-select2.js', __DIR__), array('jquery'), true, true);
@@ -1794,21 +1801,27 @@ function aesirx_generate_gpc_json() {
 
   return json_encode($gpc_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 }
-function allow_data_protocol($protocols) {
+function aesirx_analytics_allow_data_protocol($protocols) {
   $protocols[] = 'data'; // Add "data" to the allowed protocols list
   return $protocols;
 }
-add_filter('kses_allowed_protocols', 'allow_data_protocol');
+add_filter('kses_allowed_protocols', 'aesirx_analytics_allow_data_protocol');
 
 
-add_action('wp_ajax_update_aesirx_options', 'update_aesirx_options');
+add_action('wp_ajax_update_aesirx_options', 'aesirx_analytics_update_aesirx_options');
 
-function update_aesirx_options() {
+function aesirx_analytics_update_aesirx_options() {
     // Check nonce for security (optional but recommended)
     check_ajax_referer('aesirx_consent_nonce', 'security');
 
     // Get options from request
-    $options = $_POST['options'] ?? [];
+    $options = [];
+    if ( isset( $_POST['options'] ) ) {
+        $options = array_map(
+            'sanitize_text_field',
+            wp_unslash( $_POST['options'] )
+        );
+    }
 
     // Sanitize or validate $options as needed
 
@@ -1819,13 +1832,19 @@ function update_aesirx_options() {
     wp_send_json_success('Options updated successfully');
 }
 
-add_action('wp_ajax_update_aesirx_plugins_options', 'update_aesirx_plugins_options');
+add_action('wp_ajax_update_aesirx_plugins_options', 'aesirx_analytics_update_aesirx_plugins_options');
 
-function update_aesirx_plugins_options() {
+function aesirx_analytics_update_aesirx_plugins_options() {
   check_ajax_referer('aesirx_consent_nonce', 'security');
 
   // Decode JSON string directly
-  $json_raw = $_POST['options'] ?? '{}';
+  $json_raw = '{}';
+  if ( isset( $_POST['options'] ) ) {
+      $json_raw = array_map(
+            'sanitize_text_field',
+            wp_unslash( $_POST['options'] )
+      );
+  }
   $decoded_options = json_decode(stripslashes($json_raw), true); // Decode JSON
 
   if (!is_array($decoded_options)) {

@@ -1,11 +1,11 @@
 <?php
-
+if ( ! defined( 'ABSPATH' ) ) exit;
 global $wpdb;
 
-$sql = [];
+$aesirx_analytics_sql = [];
 
 // Create analytics_category_consent table
-$sql[] = "
+$aesirx_analytics_sql[] = "
     CREATE TABLE `{$wpdb->prefix}analytics_category_consent` (
         `id` char(36) NOT NULL,
         `uuid` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,

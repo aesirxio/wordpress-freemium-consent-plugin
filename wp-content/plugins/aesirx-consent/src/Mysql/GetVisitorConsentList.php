@@ -1,5 +1,5 @@
 <?php
-
+if ( ! defined( 'ABSPATH' ) ) exit;
 use AesirxAnalytics\AesirxAnalyticsMysqlHelper;
 
 Class AesirX_Analytics_Get_Visitor_Consent_List extends AesirxAnalyticsMysqlHelper
@@ -14,19 +14,23 @@ Class AesirX_Analytics_Get_Visitor_Consent_List extends AesirxAnalyticsMysqlHelp
 
         if (substr($wpdb->prefix, -1) === '_') {
             $table_name = $wpdb->prefix . 'analytics_visitor_consent';
-            $exists = $wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $table_name));
+            $exists = $wpdb->get_var(// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Table existence check has no WP API alternative.
+                $wpdb->prepare("SHOW TABLES LIKE %s", $table_name)
+            );
             if(!$exists) {
                 $wpPrefix = $wpdb->prefix . '_';
             }
         }
 
         // doing direct database calls to custom tables
-        $visitor = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $visitor = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is trusted and built from $wpdb->prefix.
             $wpdb->prepare("SELECT * FROM {$wpPrefix}analytics_visitors WHERE uuid = %s", $uuid)
         );
 
         // doing direct database calls to custom tables
-        $flows = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $flows = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is trusted and built from $wpdb->prefix.
             $wpdb->prepare("SELECT * FROM {$wpPrefix}analytics_flows WHERE visitor_uuid = %s ORDER BY id", $uuid)
         );
 
@@ -38,11 +42,12 @@ Class AesirX_Analytics_Get_Visitor_Consent_List extends AesirxAnalyticsMysqlHelp
                     AND IF (c.uuid IS NULL, 1, c.expiration IS NULL)", gmdate('Y-m-d H:i:s'));
 
             // doing direct database calls to custom tables
-            $consents = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+            $consents = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
                 $wpdb->prepare(
                     "SELECT vc.*, c.web3id, c.consent AS consent_from_consent, w.network, w.address,
                     c.expiration as consent_expiration, c.datetime as consent_datetime
-                    FROM {$wpPrefix}analytics_visitor_consent AS vc
+                    FROM {$wpPrefix}analytics_visitor_consent AS vc 
                     LEFT JOIN {$wpPrefix}analytics_consent AS c ON vc.consent_uuid = c.uuid
                     LEFT JOIN {$wpPrefix}analytics_wallet AS w ON c.wallet_uuid = w.uuid
                     WHERE vc.visitor_uuid = %s
@@ -54,7 +59,8 @@ Class AesirX_Analytics_Get_Visitor_Consent_List extends AesirxAnalyticsMysqlHelp
             );
         } else {
             // doing direct database calls to custom tables
-            $consents = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+            $consents = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
                 $wpdb->prepare(
                     "SELECT vc.*, c.web3id, c.consent AS consent_from_consent, w.network, w.address,
                     c.expiration as consent_expiration, c.datetime as consent_datetime
@@ -88,7 +94,9 @@ Class AesirX_Analytics_Get_Visitor_Consent_List extends AesirxAnalyticsMysqlHelp
                     '$1_$2',
                     $missing_table
                 );
-                $alt_exists = $wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $alt_table));
+                $alt_exists = $wpdb->get_var(// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+                    $wpdb->prepare("SHOW TABLES LIKE %s", $alt_table)
+                );
 
                 if ($alt_exists) {
                     $error_msg .= sprintf(
