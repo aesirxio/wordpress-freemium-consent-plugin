@@ -252,8 +252,23 @@ add_action('wp_enqueue_scripts', function (): void {
 
 
 add_filter('plugin_action_links_' . plugin_basename(__FILE__), function ($links) {
-  $url = esc_url(add_query_arg('page', 'aesirx-consent-management-plugin', get_admin_url() . 'admin.php'));
-  array_push($links, "<a href='$url'>" . esc_html__('Settings', 'aesirx-consent') . '</a>');
+    $url = esc_url(add_query_arg('page', 'aesirx-consent-management-plugin', get_admin_url() . 'admin.php'));
+    $links[] = sprintf(
+        '<a href="%s">%s</a>',
+        esc_url($url),
+        esc_html__('Settings', 'aesirx-consent')
+    );
+
+
+    $pro_url = 'https://aesirx.io/solutions/consent-management-platform';
+
+    $links[] = sprintf(
+        '<a href="%s" target="_blank" style="color:#d63638;font-weight:600;">
+            %s
+        </a>',
+        esc_url($pro_url),
+        esc_html__('Upgrade to Pro', 'aesirx-consent')
+    );
   return $links;
 });
 
@@ -405,6 +420,72 @@ function aesirx_analytics_admin_notice() {
     }
 }
 add_action( 'admin_notices', 'aesirx_analytics_admin_notice' );
+
+register_activation_hook(__FILE__, function () {
+    if (!defined('AESIRX_CONSENT_PRO')) {
+        set_transient(
+            'aesirx_consent_pro_upsell_notice',
+            true,
+            DAY_IN_SECONDS * 7 // show for 7 days max
+        );
+    }
+});
+
+function aesirx_consent_display_pro_upsell_notice() {
+
+    if (!current_user_can('manage_options')) {
+        return;
+    }
+
+    if (defined('AESIRX_CONSENT_PRO')) {
+        return;
+    }
+
+    if (!get_transient('aesirx_consent_pro_upsell_notice')) {
+        return;
+    }
+
+    $pro_url = 'https://aesirx.io/solutions/consent-management-platform';
+    ?>
+    <div class="notice notice-info is-dismissible aesirx-pro-upsell">
+        <p>
+            <strong><?php esc_html_e('Unlock AesirX CMP Pro 🚀', 'aesirx-consent'); ?></strong><br>
+            <?php esc_html_e(
+                'Get consent analytics, ID Verification, AI Privacy Advisor, and priority support.',
+                'aesirx-consent'
+            ); ?>
+        </p>
+        <p>
+            <a href="<?php echo esc_url($pro_url); ?>"
+               target="_blank"
+               class="button button-primary">
+                <?php esc_html_e('Upgrade to Pro', 'aesirx-consent'); ?>
+            </a>
+        </p>
+    </div>
+    <?php
+}
+add_action('admin_notices', 'aesirx_consent_display_pro_upsell_notice');
+
+add_action('admin_enqueue_scripts', function () {
+    wp_enqueue_script('jquery');
+
+    wp_add_inline_script(
+        'jquery',
+        "
+        jQuery(document).on('click', '.aesirx-pro-upsell .notice-dismiss', function () {
+            jQuery.post(ajaxurl, {
+                action: 'aesirx_dismiss_pro_upsell'
+            });
+        });
+        "
+    );
+});
+
+add_action('wp_ajax_aesirx_dismiss_pro_upsell', function () {
+    delete_transient('aesirx_consent_pro_upsell_notice');
+    wp_die();
+});
 
 add_action('admin_init', function () {
     if (get_option('aesirx_analytics_do_activation_redirect', false)) {
