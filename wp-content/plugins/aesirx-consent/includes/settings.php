@@ -2,6 +2,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
+define('AESIRX_CONSENT_VERSION', '1.0.0');
+
 add_action('admin_init', function () {
   register_setting('aesirx_analytics_plugin_options', 'aesirx_analytics_plugin_options', function (
     $value
@@ -1549,18 +1551,18 @@ add_action('admin_menu', function () {
 
 add_action('admin_enqueue_scripts', function ($hook) {
   if ($hook === "aesirx-cmp_page_aesirx-cmp-geo") {
-    wp_register_script('aesirx_analytics_geo', plugins_url('assets/vendor/aesirx-consent-geo.js', __DIR__), array('jquery'), false, true);
+    wp_register_script('aesirx_analytics_geo', plugins_url('assets/vendor/aesirx-consent-geo.js', __DIR__), array('jquery'), AESIRX_CONSENT_VERSION, true);
     wp_enqueue_script('aesirx_analytics_geo');
   }
   if ($hook === "aesirx-cmp_page_aesirx-cmp-verify") {
     wp_enqueue_script('aesirx_analytics_select2', plugins_url('assets/vendor/aesirx-consent-select2.js', __DIR__), array('jquery'), true, true);
-    wp_register_script('aesirx_analytics_verify', plugins_url('assets/vendor/aesirx-consent-verify.js', __DIR__), array('jquery'), false, true);
+    wp_register_script('aesirx_analytics_verify', plugins_url('assets/vendor/aesirx-consent-verify.js', __DIR__), array('jquery'), AESIRX_CONSENT_VERSION, true);
     wp_enqueue_script('aesirx_analytics_verify');
   }
   if ($hook === 'toplevel_page_aesirx-consent-management-plugin' || $hook === "aesirx-cmp_page_aesirx-cmp-modal") {
     wp_enqueue_script('aesirx_analytics_ckeditor', 'https://api.aesirx.io/images/js/aesirx-consent-ckeditor.js', array('jquery'), true, true);
     wp_enqueue_script('aesirx_analytics_select2', plugins_url('assets/vendor/aesirx-consent-select2.js', __DIR__), array('jquery'), true, true);
-    wp_register_script('aesirx_analytics_repeatable_fields', plugins_url('assets/vendor/aesirx-consent-repeatable-fields.js', __DIR__), array('jquery'), false, true);
+    wp_register_script('aesirx_analytics_repeatable_fields', plugins_url('assets/vendor/aesirx-consent-repeatable-fields.js', __DIR__), array('jquery'), AESIRX_CONSENT_VERSION, true);
     $translation_array = array(
       'txt_shield_of_privacy' => __( 'Shield of Privacy', 'aesirx-consent' ),
       'txt_you_can_revoke' => __( 'Revoke your consent for data use whenever you wish.', 'aesirx-consent' ),
