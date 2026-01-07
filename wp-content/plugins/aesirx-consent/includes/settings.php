@@ -393,7 +393,6 @@ add_action('admin_init', function () {
       echo '<div id="aesirx-consent-blocking-cookies">';
       echo wp_kses('
         <div class="aesirx-consent-cookie-row header">
-          <div class="block">Permanent Block</div>
           <div class="category">Category</div>
         </div>', aesirx_analytics_escape_html())
       ;
@@ -403,14 +402,6 @@ add_action('admin_init', function () {
             <div class="aesirx-consent-cookie-row">
               <div class="title">'.esc_html__('Domain', 'aesirx-consent').'</div>
               <input type="text" name="aesirx_analytics_plugin_options[blocking_cookies][]" placeholder="'.esc_attr__('Enter domain or path', 'aesirx-consent').'" value="'.esc_attr($field).'">
-               <div class="blocking_permanent">
-                <input type="hidden" name="aesirx_analytics_plugin_options[blocking_cookies_permanent]['.$key.']" value="off">
-                <input type="checkbox" name="aesirx_analytics_plugin_options[blocking_cookies_permanent]['.$key.']" 
-                      value="on" '.( ($options['blocking_cookies_permanent'][$key] === "on") ? 'checked' : '' ).'>
-                <div class="input_information_content">
-                  Block permanently
-                </div>
-              </div>
               <select name="aesirx_analytics_plugin_options[blocking_cookies_category][]">
                 <option value="essential" '.($options['blocking_cookies_category'][$key] === 'essential' ? 'selected' : '').'>Essential</option>
                 <option value="functional" '.($options['blocking_cookies_category'][$key] === 'functional' ? 'selected' : '').'>Functional</option>
@@ -429,13 +420,6 @@ add_action('admin_init', function () {
         <div class="aesirx-consent-cookie-row">
           <div class="title">'.esc_html__('Domain', 'aesirx-consent').'</div>
           <input type="text" name="aesirx_analytics_plugin_options[blocking_cookies][]" placeholder="'.esc_attr__('Enter domain or path', 'aesirx-consent').'">
-          <div class="blocking_permanent">
-            <input type="hidden" name="aesirx_analytics_plugin_options[blocking_cookies_permanent][]" value="off">
-            <input type="checkbox" name="aesirx_analytics_plugin_options[blocking_cookies_permanent][]">
-            <div class="input_information_content">
-              Block permanently
-            </div>
-          </div>
           <select name="aesirx_analytics_plugin_options[blocking_cookies_category][]">
             <option value="essential" selected>Essential</option>
             <option value="functional">Functional</option>
@@ -497,17 +481,6 @@ add_action('admin_init', function () {
                 <p class="small-description">'. esc_html__('Blocks JavaScript from third-party domains, allowing first-party scripts to run normally & keep essential site functions intact.', 'aesirx-consent') . '</p>
               </div>
             </label>
-          </div>
-          <div class="description">
-            <label class="radio_wrapper">
-              <input type="radio" class="analytic-blocking_cookies_mode-class" name="aesirx_analytics_plugin_options[blocking_cookies_mode]" ' .
-            ($mode === 'both' ? $checked : '') .
-            ' value="both" />
-              <div class="input_content">
-                <p>'. esc_html__('Both First and Third-Party Hosts', 'aesirx-consent') . '</p>
-                <p class="small-description">'. esc_html__('Blocks JavaScript from both first-party & third-party domains for comprehensive script control, giving you the ability to block any JavaScript from internal or external sources based on user consent.', 'aesirx-consent') . '</p>
-              </div>
-              </label>
           </div>
         </div>
           ', aesirx_analytics_escape_html());
@@ -1585,7 +1558,7 @@ add_action('admin_enqueue_scripts', function ($hook) {
     wp_enqueue_script('aesirx_analytics_verify');
   }
   if ($hook === 'toplevel_page_aesirx-consent-management-plugin' || $hook === "aesirx-cmp_page_aesirx-cmp-modal") {
-    wp_enqueue_script('aesirx_analytics_ckeditor', plugins_url('assets/vendor/aesirx-consent-ckeditor.js', __DIR__), array('jquery'), true, true);
+    wp_enqueue_script('aesirx_analytics_ckeditor', 'https://api.aesirx.io/images/js/aesirx-consent-ckeditor.js', array('jquery'), true, true);
     wp_enqueue_script('aesirx_analytics_select2', plugins_url('assets/vendor/aesirx-consent-select2.js', __DIR__), array('jquery'), true, true);
     wp_register_script('aesirx_analytics_repeatable_fields', plugins_url('assets/vendor/aesirx-consent-repeatable-fields.js', __DIR__), array('jquery'), false, true);
     $translation_array = array(

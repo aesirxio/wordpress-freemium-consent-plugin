@@ -451,7 +451,7 @@ function aesirx_consent_display_pro_upsell_notice() {
         <p>
             <strong><?php esc_html_e('Unlock AesirX CMP Pro 🚀', 'aesirx-consent'); ?></strong><br>
             <?php esc_html_e(
-                'Get consent analytics, ID Verification, AI Privacy Advisor, and priority support.',
+                'Unlock AI Auto-Blocking, ID Verification, Consent Analytics, AI Privacy Advisor & priority support with AesirX CMP Pro.',
                 'aesirx-consent'
             ); ?>
         </p>

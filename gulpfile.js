@@ -59,12 +59,6 @@ function moveVerifyJSTask() {
     .pipe(gulp.dest(`${dist}/plugins/aesirx-consent/assets/vendor`));
 }
 
-function moveCKeditorJSTask() {
-  return gulp
-    .src(['./wp-content/plugins/aesirx-consent/aesirx-consent-ckeditor.js'])
-    .pipe(gulp.dest(`${dist}/plugins/aesirx-consent/assets/vendor`));
-}
-
 function moveSelect2JSTask() {
   return gulp
     .src(['./wp-content/plugins/aesirx-consent/aesirx-consent-select2.js'])
@@ -115,7 +109,6 @@ exports.zip = series(
   moveRepeatableFieldsJSTask,
   moveGeoJSTask,
   moveVerifyJSTask,
-  moveCKeditorJSTask,
   moveSelect2JSTask,
   webpackBIApp,
   composerTask,
@@ -138,7 +131,6 @@ exports.watch = function () {
       moveRepeatableFieldsJSTask,
       moveGeoJSTask,
       moveVerifyJSTask,
-      moveCKeditorJSTask,
       moveSelect2JSTask,
       composerTask
     )

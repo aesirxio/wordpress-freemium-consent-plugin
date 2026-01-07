@@ -1,6 +1,6 @@
 === AesirX Consent ===
-Contributors: aesirx,vikingtechguy,nixa999,nguyenbao10,vietnguyen1406,devphutran
-Tags: privacy, compliance, wordpress consent, consent
+Contributors: aesirx,vikingtechguy,vietnguyen1406,devphutran
+Tags: privacy, compliance, wordpress consent, consent, consent manegement, cmp
 Requires at least: 5.9
 Tested up to: 6.9
 Stable tag: 1.0.0
@@ -11,39 +11,67 @@ Integrating first-party consent for GDPR/ePrivacy compliance.
 
 == Description ==
 
-AesirX Consent provides privacy-focused consent for WordPress, offering seamless integration of consent management. AesirX Consent WordPress plugin enables you to gain valuable insights into your website's performance while ensuring user privacy and compliance with GDPR, CCPA, ePrivacy Directive and other data protection regulations. 
+AesirX CMP is a privacy-first Consent Management Platform for WordPress built for consent-before-tracking.
 
-AesirX Consent' mission is to deliver prioritizing user privacy and consent.
+AesirX CMP helps you collect and manage user consent in a clear and compliant way - and, importantly, it helps you hold back scripts, cookies, and tracking technologies until consent is given using a first-party enforcement approach.
 
-= How AesirX Consent for WordPress Solves Problems: =
+You get a practical CMP baseline for free forever, and you can upgrade to AesirX CMP Pro to unlock advanced automation, consent analytics, and additional compliance tooling.
 
-1. **Comprehensive Consent Management:** Users can fully control their data, including the right to reject or grant consent, and choose decentralized consent for maximum privacy. They can also revoke consent, manage consents, and opt-in for specific features.
-1. **Simple Installation:** No coding is required; setup is quick and easy.
-1. **Free Access:** Essential features are available at no cost, providing valuable insights to everyone.
-1. **GDPR Compliance:** Built-in tools help you meet GDPR requirements and maintain global privacy standards.
-1. **Expandable:** Easily add more features with additional plugins and integrations
+= How AesirX CMP for WordPress Solves Problems: =
 
-= Features Include: =
+1. **Consent-before-tracking:** Configure consent flows and ensure tracking is blocked until the user opts in.
+1. **Covers all tracking technologies:** Not just cookies, as the many alternatives that is non-compliant.
+1. **First-party enforcement:** Manage consent inside WordPress without relying on third-party CMP services.
+1. **Free forever:** CMP Freemium functionality is available at no cost.
+1. **Upgradeable Pro versions:** Add advanced features when needed (AI advisor / auto-block, consent analytics, ID/age verification, privacy scanning, and more).
 
-* **Consent Management:** Advanced tools for managing user consent and privacy preferences.
-* **Seamless WordPress Integration:** Effortless setup and configuration within the WordPress platform.
+= Features (Free) =
+
+* **Overview:** See your consent configuration status at a glance.
+* **Consent Modal (Templates):** Create and customize your consent modal using ready-to-use templates.
+* **Consent Logic (Basic):** Configure consent mode (opt-in / opt-out) and Global Privacy Controls (GPC) behavior (where applicable).
+* **Consent Log:** Record consent events (log only - no consent analytics in free).
+* **Geo-handling:** Apply region-aware consent behavior and templates.
+* **Consent Shield (Lite):** Hold back tracking until consent using:
+  * **WP plugin blocking + category mapping**
+  * **Domain Shield / Path Shield rules**
+
+Lite version does not include Permanent Block and does not include first-party/third-party blocking mode options.
+
+= Pro Versions (Optional Upgrades) =
+
+Upgrade to **AesirX CMP Pro** to unlock:
+
+* **Consent Shield (Full):** Includes **Permanent Block** and advanced blocking modes/options.
+* **Consent Analytics:** Analyze consent rates and consent performance.
+* **AI Privacy Advisor:** Automation and recommendations to improve compliance and setup.
+* **AI Auto-Blocking:** Configure block of 3rd parties and plugins based on AI Privacy Advisor.
+* **Privacy Scanner:** Detect tracking technologies and compliance risks.
+* **ID Verification:** Optional verification flows (e.g., age/ID) for regulated experiences using zero-knowledge proofs.
 
 = 3rd party services =
 
-We use https://walletconnect.com/ for connecting the wallet in your browser with our consent.
-The Terms of service can be found here https://walletconnect.com/terms and the Privacy policy is here https://walletconnect.com/privacy.
+AesirX CMP does not require third-party services for standard consent mode and consent enforcement.
+However, AesirX CMP includes an **optional Decentralized Consent mode.** If the site owner enables Decentralized Consent and the site visitor chooses to use it, the plugin will load and use the following third-party services to establish the decentralized consent flow:
 
-We use https://www.concordium.com/ to connect the your wallet with our consent form.
-The Privacy policy can be found here https://www.concordium.com/privacy-policy.
+* **WalletConnect** (used to connect the visitor’s wallet for signing the decentralized consent action)
+* **Concordium** (used as part of the decentralized consent verification and ID anchoring flow, depending on configuration)
 
-We use https://friendlycaptcha.com/ to make a captcha verification on our form.
-The Terms of service can be found here https://friendlycaptcha.com/legal/terms and Privacy policy can be found here https://friendlycaptcha.com/privacy.
+These services are **not loaded** unless Decentralized Consent mode is enabled and selected by the visitor.
+
+This may transmit wallet connection metadata and a signed consent payload.
+
+When used for ID verification zero-knowledge proofs are used as privacy preserving technologies (PETs) to ensure the personal data is not shared with the website owner.
+
+= Source code for compressed content =
+
+Human-readable source code:
+* AesirX CMP Freemium for WP: https://github.com/aesirxio/wordpress-freemium-consent-plugin
 
 = Validation =
 
-We are using our server api.aesirx.io for retriving and updating geo data.
-We are using our server dev01.aesirx.io for validating wallet and JWT decoding.
-The Terms of service can be found here https://aesirx.io/terms-conditions and the Privacy policy is here https://aesirx.io/privacy-policy.
+Terms of service: https://aesirx.io/terms-conditions
+Privacy policy: https://aesirx.io/privacy-policy
 
 == Changelog ==
 
