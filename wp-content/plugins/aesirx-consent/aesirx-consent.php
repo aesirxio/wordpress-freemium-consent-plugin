@@ -50,18 +50,40 @@ add_action('wp_enqueue_scripts', function (): void {
             ? ((!empty($allowedCountries) || !empty($disallowedCountries)) ? 1 : 0)
             : 0;
 
-    if ($ageCheck || $countryCheck) {
-        $scriptFile = 'assets/vendor/consent-verify.js';
-    } elseif ($datastream_template === 'simple-consent-mode') {
-        $scriptFile = 'assets/vendor/consent-simple.js';
+   if ($datastream_template === 'simple-consent-mode') {
+        $scriptFile = 'assets/vendor/consent-simple-chunks/consent-simple.js';
+        $cssFile = 'assets/vendor/consent-simple-chunks/consent-simple.css';
     };
     if ($datastream_template !== 'simple-consent-mode') {
-        $scriptFile = 'assets/vendor/consent.js';
+        $scriptFile = 'assets/vendor/consent-chunks/consent.js';
+        $cssFile = 'assets/vendor/consent-chunks/consent.css';
     }
 
-    wp_register_script('aesirx-consent', plugins_url($scriptFile, __FILE__), [], '1.0.0',  array(
-        'in_footer' => false,
-    ));
+    // Loader
+    wp_enqueue_script(
+        'aesirx-consent',
+        plugins_url('assets/vendor/consent-loader.global.js', __FILE__),
+        [],
+        '1.0.0',
+    true
+    );
+
+    // Config for loader
+    wp_add_inline_script(
+        'aesirx-consent',
+        'window.aesirxConsentConfig = {
+            uiEntry: "' . plugins_url($scriptFile, __FILE__) . '"
+        };',
+        'before'
+    );
+    wp_register_style(
+        'aesirx-consent',
+        plugins_url($cssFile, __FILE__),
+        [],
+        '1.0.0',
+        'all'
+    );
+    wp_enqueue_style('aesirx-consent');
     $translation_array = array(
         'txt_shield_of_privacy' => __( 'Shield of Privacy', 'aesirx-consent' ),
         'txt_you_can_revoke' => __( 'Revoke your consent for data use whenever you wish.', 'aesirx-consent' ),
@@ -148,7 +170,6 @@ add_action('wp_enqueue_scripts', function (): void {
         "txt_cookie_declaration" => __( "Cookie Declaration", 'aesirx-consent' )
     );
     wp_localize_script( 'aesirx-consent', 'aesirx_analytics_translate', $translation_array );
-    wp_enqueue_script('aesirx-consent');
 
     $domain =
         ($options['storage'] ?? 'internal') === 'internal'

@@ -75,5 +75,8 @@ Privacy policy: https://aesirx.io/privacy-policy
 
 == Changelog ==
 
+= 1.0.1 =
+* Optimize file size
+
 = 1.0.0 =
 * AesirX Freemium Consent
