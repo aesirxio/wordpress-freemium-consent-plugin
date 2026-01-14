@@ -632,65 +632,8 @@ function aesirx_analytics_get_deregistered_scripts($havePermanent = false) {
 
     return $deregistered_scripts;
 }
-if (!$aesirx_analytics_consent && $aesirx_analytics_consentParams !== 'yes') {
-    add_action( 'wp_enqueue_scripts', function (): void {
 
-		$deregistered_scripts = aesirx_analytics_get_deregistered_scripts();
-
-        wp_localize_script( 'aesirx-consent', 'aesirx_analytics_degistered_scripts', $deregistered_scripts );
-	}, 9999 );
-
-    add_action( 'wp_head', function (): void {
-
-        $deregistered_scripts = aesirx_analytics_get_deregistered_scripts();
-
-        ?>
-        <script type="text/javascript">
-            var deregistered_scripts_head = <?php echo wp_json_encode($deregistered_scripts); ?>;
-        </script>
-    <?php
-    }, 9999 );
-
-    add_action( 'wp_footer', function (): void {
-
-        $deregistered_scripts = aesirx_analytics_get_deregistered_scripts();
-
-        ?>
-        <script type="text/javascript">
-            var deregistered_scripts_footer = <?php echo wp_json_encode($deregistered_scripts); ?>;
-        </script>
-    <?php
-    }, 9999 );
-} else if ($aesirx_analytics_disabled_block_domains && ($aesirx_analytics_consent || $aesirx_analytics_consentParams !== 'yes')) {
-    add_action( 'wp_enqueue_scripts', function (): void {
-
-		$deregistered_scripts = aesirx_analytics_block_disabled_domains();
-
-        wp_localize_script( 'aesirx-consent', 'aesirx_analytics_degistered_scripts', $deregistered_scripts );
-	}, 9999 );
-
-    add_action( 'wp_head', function (): void {
-
-        $deregistered_scripts = aesirx_analytics_block_disabled_domains();
-
-        ?>
-        <script type="text/javascript">
-            var deregistered_scripts_head = <?php echo wp_json_encode($deregistered_scripts); ?>;
-        </script>
-    <?php
-    }, 9999 );
-
-    add_action( 'wp_footer', function (): void {
-
-        $deregistered_scripts = aesirx_analytics_block_disabled_domains();
-
-        ?>
-        <script type="text/javascript">
-            var deregistered_scripts_footer = <?php echo wp_json_encode($deregistered_scripts); ?>;
-        </script>
-    <?php
-    }, 9999 );
-    function aesirx_analytics_block_disabled_domains() {
+function aesirx_analytics_block_disabled_domains() {
         global $wp_scripts;
         $deregistered_scripts = array();
         $disabled_block_domains = get_option('aesirx_analytics_plugin_options_disabled_block_domains');
@@ -716,33 +659,55 @@ if (!$aesirx_analytics_consent && $aesirx_analytics_consentParams !== 'yes') {
         }
         return $deregistered_scripts;
     }
-} else if (isset($aesirx_analytics_optionsPlugin['blocking_cookies_permanent']) && count($aesirx_analytics_blockingCookiesPermanent) > 0) {
-    add_action( 'wp_enqueue_scripts', function (): void {
 
-		$deregistered_scripts = aesirx_analytics_get_deregistered_scripts(true);
+add_action('wp_enqueue_scripts', function () use (
+    $aesirx_analytics_consent,
+    $aesirx_analytics_consentParams,
+    $aesirx_analytics_disabled_block_domains,
+    $aesirx_analytics_blockingCookiesPermanent
+) {
 
-        wp_localize_script( 'aesirx-consent', 'aesirx_analytics_degistered_scripts', $deregistered_scripts );
-	}, 9999 );
+    // Ensure your JS exists
+    if (!wp_script_is('aesirx-consent', 'enqueued')) {
+        return;
+    }
 
-    add_action( 'wp_head', function (): void {
+    $deregistered_scripts = [];
 
+    if (
+        !$aesirx_analytics_consent &&
+        $aesirx_analytics_consentParams !== 'yes'
+    ) {
+        $deregistered_scripts = aesirx_analytics_get_deregistered_scripts();
+
+    } elseif (
+        $aesirx_analytics_disabled_block_domains &&
+        ($aesirx_analytics_consent || $aesirx_analytics_consentParams !== 'yes')
+    ) {
+        $deregistered_scripts = aesirx_analytics_block_disabled_domains();
+
+    } elseif (!empty($aesirx_analytics_blockingCookiesPermanent)) {
         $deregistered_scripts = aesirx_analytics_get_deregistered_scripts(true);
+    }
 
-        ?>
-        <script type="text/javascript">
-            var deregistered_scripts_head = <?php echo wp_json_encode($deregistered_scripts); ?>;
-        </script>
-    <?php
-    }, 9999 );
+    if (empty($deregistered_scripts)) {
+        return;
+    }
 
-    add_action( 'wp_footer', function (): void {
+    wp_add_inline_script(
+        'aesirx-consent',
+        '(function(){
+            window.aesirx = window.aesirx || {};
+            var scripts = ' . wp_json_encode($deregistered_scripts) . ';
 
-        $deregistered_scripts = aesirx_analytics_get_deregistered_scripts(true);
+            window.aesirx.deregisteredScripts = scripts;
 
-        ?>
-        <script type="text/javascript">
-            var deregistered_scripts_footer = <?php echo wp_json_encode($deregistered_scripts); ?>;
-        </script>
-    <?php
-    }, 9999 );
-}
+            // Backward compatibility
+            window.aesirx_analytics_degistered_scripts = scripts;
+            window.aesirx_analytics_deregistered_scripts_head = scripts;
+            window.aesirx_analytics_deregistered_scripts_footer = scripts;
+        })();',
+        'before'
+    );
+
+}, 9999);

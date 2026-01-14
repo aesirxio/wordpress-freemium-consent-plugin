@@ -1,6 +1,6 @@
 {
   "name": "aesirx_cmp",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "CMP via aesirx",
   "private": true,
   "scripts": {
