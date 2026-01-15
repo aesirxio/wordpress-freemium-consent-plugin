@@ -7,9 +7,11 @@ Class AesirX_Analytics_Get_Total_Consent_Region extends AesirxAnalyticsMysqlHelp
 {
     function aesirx_analytics_mysql_execute($params = [])
     {
+        global $wpdb;
         $where_clause = [];
         $where_clause_2 = [];
         $bind = [];
+        $wpPrefix = $wpdb->prefix;
 
         parent::aesirx_analytics_add_region_consent_filters($params, $where_clause, $bind, $where_clause_2);
         $sql = 
@@ -21,14 +23,14 @@ Class AesirX_Analytics_Get_Total_Consent_Region extends AesirxAnalyticsMysqlHelp
                 COUNT(DISTINCT CASE WHEN category_consent.tier = '5' THEN CONCAT(category_consent.visitor_uuid, '|', category_consent.datetime) END) AS opt_out_consent_region,
                 (
                     SELECT COUNT(DISTINCT c.datetime)
-                    FROM `#__analytics_visitor_consent` c
-                    JOIN `#__analytics_visitors` v ON c.visitor_uuid = v.uuid
+                    FROM `{$wpPrefix}analytics_visitor_consent` c
+                    JOIN `{$wpPrefix}analytics_visitors` v ON c.visitor_uuid = v.uuid
                     WHERE " . implode(" AND ", $where_clause) ."
                 ) AS total_consent
             FROM
-                `#__analytics_visitors` visitor
+                `{$wpPrefix}analytics_visitors` visitor
             JOIN
-                `#__analytics_visitor_consent` category_consent ON visitor.uuid = category_consent.visitor_uuid
+                `{$wpPrefix}analytics_visitor_consent` category_consent ON visitor.uuid = category_consent.visitor_uuid
             WHERE " . implode(" AND ", $where_clause_2) ."
             GROUP BY
                 visitor.timezone,
@@ -39,8 +41,8 @@ Class AesirX_Analytics_Get_Total_Consent_Region extends AesirxAnalyticsMysqlHelp
         $total_sql = "
             SELECT COUNT(*) FROM (
                 SELECT 1
-                FROM `#__analytics_visitors` visitor
-                JOIN `#__analytics_visitor_consent` category_consent
+                FROM `{$wpPrefix}analytics_visitors` visitor
+                JOIN `{$wpPrefix}analytics_visitor_consent` category_consent
                     ON visitor.uuid = category_consent.visitor_uuid
                 WHERE " . implode(" AND ", $where_clause_2) . "
                 GROUP BY visitor.timezone, visitor.lang

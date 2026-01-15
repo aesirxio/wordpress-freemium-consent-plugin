@@ -27,11 +27,7 @@ use AesirxAnalytics\Migrator\MigratorMysql;
 
 require_once plugin_dir_path(__FILE__) . 'vendor/autoload.php';
 require_once plugin_dir_path(__FILE__) . 'includes/settings.php';
-
-
-include_once(ABSPATH . 'wp-admin/includes/plugin.php');
-
-define('AESIRX_PLUGIN_BASE_PATH', WP_PLUGIN_DIR . '/aesirx-consent');
+define( 'AESIRX_PLUGIN_BASE_PATH', plugin_dir_path( __FILE__ ) );
 
 add_action('wp_enqueue_scripts', function (): void {
     $options = get_option('aesirx_analytics_plugin_options');
@@ -71,9 +67,9 @@ add_action('wp_enqueue_scripts', function (): void {
     // Config for loader
     wp_add_inline_script(
         'aesirx-consent',
-        'window.aesirxConsentConfig = {
-            uiEntry: "' . plugins_url($scriptFile, __FILE__) . '"
-        };',
+        'window.aesirxConsentConfig = ' . wp_json_encode([
+            'uiEntry' => plugins_url($scriptFile, __FILE__),
+        ]) . ';',
         'before'
     );
     wp_register_style(
@@ -334,7 +330,7 @@ function aesirx_analytics_url_handler()
         $router->addRoute(
             (new RouteUrl('/remember_flow/{flow}', static function (string $flow): string {
 
-                set_transient('analytics_flow_uuid', $flow, HOUR_IN_SECONDS);
+                set_transient('aesirx_analytics_flow_uuid', $flow, HOUR_IN_SECONDS);
 
                 return wp_json_encode(true);
             }))
@@ -549,6 +545,13 @@ function aesirx_analytics_get_real_user_agent() {
     return false;
 }
 
+function aesirx_get_installed_plugins() {
+    if ( ! function_exists( 'get_plugins' ) ) {
+        require_once ABSPATH . 'wp-admin/includes/plugin.php';
+    }
+    return get_plugins();
+}
+
 $aesirx_analytics_ip = aesirx_analytics_get_real_ip();
 $aesirx_analytics_userAgent = aesirx_analytics_get_real_user_agent();
 
@@ -569,8 +572,6 @@ $aesirx_analytics_consent = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectD
     )
 );
 $aesirx_analytics_disabled_block_domains = get_option('aesirx_analytics_plugin_options_disabled_block_domains');
-// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Display-only query parameter, no state change.
-$aesirx_analytics_consentParams = isset($_GET['consent']) ? sanitize_text_field(wp_unslash( $_GET['consent'] )) : 'no';
 $aesirx_analytics_optionsPlugin = get_option('aesirx_analytics_plugin_options');
 $aesirx_analytics_blockingCookiesPermanent =  isset($aesirx_analytics_optionsPlugin['blocking_cookies_permanent']) &&  count($aesirx_analytics_optionsPlugin['blocking_cookies_permanent']) > 0 ? $aesirx_analytics_optionsPlugin['blocking_cookies_permanent'] : [];
 
@@ -662,7 +663,6 @@ function aesirx_analytics_block_disabled_domains() {
 
 add_action('wp_enqueue_scripts', function () use (
     $aesirx_analytics_consent,
-    $aesirx_analytics_consentParams,
     $aesirx_analytics_disabled_block_domains,
     $aesirx_analytics_blockingCookiesPermanent
 ) {
@@ -674,15 +674,11 @@ add_action('wp_enqueue_scripts', function () use (
 
     $deregistered_scripts = [];
 
-    if (
-        !$aesirx_analytics_consent &&
-        $aesirx_analytics_consentParams !== 'yes'
-    ) {
+    if (!$aesirx_analytics_consent) {
         $deregistered_scripts = aesirx_analytics_get_deregistered_scripts();
 
     } elseif (
-        $aesirx_analytics_disabled_block_domains &&
-        ($aesirx_analytics_consent || $aesirx_analytics_consentParams !== 'yes')
+        $aesirx_analytics_disabled_block_domains && $aesirx_analytics_consent
     ) {
         $deregistered_scripts = aesirx_analytics_block_disabled_domains();
 

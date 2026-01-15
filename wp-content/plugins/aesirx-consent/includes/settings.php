@@ -111,7 +111,7 @@ add_action('admin_init', function () {
       echo wp_kses("
         <div class='aesirx_consent_template'>
           <label class='aesirx_consent_template_item ".(!$datastream_template || $datastream_template === 'simple-consent-mode' ? 'active' : '')."' for='simple-mode'>
-            <img width='585px' height='388px' src='". plugins_url( 'aesirx-consent/assets/images-plugin/consent_simple_mode.png')."' />
+            <img width='585px' height='388px' src='". plugins_url('assets/images-plugin/consent_simple_mode.png', __DIR__)."' />
             <p class='title'>".esc_html__('Default Consent Mode', 'aesirx-consent')."</p>
             <input id='simple-mode' type='radio' class='analytic-consent-class' name='aesirx_consent_modal_plugin_options[datastream_template]' " .
             (!$datastream_template || $datastream_template === 'simple-consent-mode' ? "checked='checked'" : '') .
@@ -120,7 +120,7 @@ add_action('admin_init', function () {
           </label>
           <label class='aesirx_consent_template_item ".
           ($datastream_template === 'default' ? 'active' : '') ."' for='default'>
-            <img width='585px' height='388px' src='". plugins_url( 'aesirx-consent/assets/images-plugin/consent_default.png')."' />
+            <img width='585px' height='388px' src='". plugins_url('assets/images-plugin/consent_default.png', __DIR__)."' />
             <p class='title'>".esc_html__('Decentralized Consent Mode', 'aesirx-consent')."</p>
             <input type='radio' id='default' class='analytic-consent-class' name='aesirx_consent_modal_plugin_options[datastream_template]' " .
             ($datastream_template === 'default' ? "checked='checked'" : '') .
@@ -150,7 +150,7 @@ add_action('admin_init', function () {
       "' />", aesirx_analytics_escape_html());
       echo wp_kses("
         <div class='input_information'>
-          <img width='20px' height='20px' src='". plugins_url( 'aesirx-consent/assets/images-plugin/infor_icon.png')."' />
+          <img width='20px' height='20px' src='". plugins_url('assets/images-plugin/infor_icon.png', __DIR__)."' />
           ".sprintf(__("<div class='input_information_content'>
           Remember to include the explicit purpose (e.g., analytics, marketing) in the consent text to inform users why GTM is being used.</div>", 'aesirx-consent'))."
         </div>
@@ -175,7 +175,7 @@ add_action('admin_init', function () {
       "' />", aesirx_analytics_escape_html());
       echo wp_kses("
         <div class='input_information'>
-          <img width='20px' height='20px' src='". plugins_url( 'aesirx-consent/assets/images-plugin/infor_icon.png')."' />
+          <img width='20px' height='20px' src='". plugins_url('assets/images-plugin/infor_icon.png', __DIR__)."' />
           ".sprintf(__("<div class='input_information_content'>
           Remember to include the explicit purpose (e.g., analytics, marketing) in the consent text to inform users why GTM is being used.</div>", 'aesirx-consent'))."
         </div>
@@ -194,7 +194,7 @@ add_action('admin_init', function () {
     esc_html__('GTM General', 'aesirx-consent'),
     function () {
       echo wp_kses('<p class="small-description mb-10">
-      <img width="18px" height="18px" src="'. plugins_url( 'aesirx-consent/assets/images-plugin/question_icon.png').'" />'.esc_html__('To configure, input your Google Tag Manager Gtag ID & GTM ID in the designated fields. Once set up, Google Tag Manager will only load after the user provides consent.', 'aesirx-consent').'</p>', aesirx_analytics_escape_html());
+      <img width="18px" height="18px" src="'. plugins_url('assets/images-plugin/question_icon.png', __DIR__).'" />'.esc_html__('To configure, input your Google Tag Manager Gtag ID & GTM ID in the designated fields. Once set up, Google Tag Manager will only load after the user provides consent.', 'aesirx-consent').'</p>', aesirx_analytics_escape_html());
     },
     'aesirx_analytics_plugin',
     'aesirx_analytics_settings',
@@ -234,7 +234,7 @@ add_action('admin_init', function () {
       echo wp_kses('
       <p class="reset_consent_note">'.esc_html__("Always link your own website's Privacy Policy, not the AesirX example", 'aesirx-consent').'.</p>
       <button type="button" class="reset_consent_button aesirx_btn_success_light">
-        <img width="20px" height="20px" src="'. plugins_url( 'aesirx-consent/assets/images-plugin/reset_icon.png').'" />
+        <img width="20px" height="20px" src="'. plugins_url('assets/images-plugin/reset_icon.png', __DIR__).'" />
         '.esc_html__("Reset Consent", 'aesirx-consent').'
       </button>', aesirx_analytics_escape_html());
     },
@@ -260,7 +260,7 @@ add_action('admin_init', function () {
       </div>', aesirx_analytics_escape_html());
       echo wp_kses('
       <button type="button" class="reset_cookie_button aesirx_btn_success_light">
-        <img width="20px" height="20px" src="'. plugins_url( 'aesirx-consent/assets/images-plugin/reset_icon.png').'" />
+        <img width="20px" height="20px" src="'. plugins_url('assets/images-plugin/reset_icon.png', __DIR__).'" />
         '.esc_html__("Reset Cookie", 'aesirx-consent').'
       </button>', aesirx_analytics_escape_html());
     },
@@ -286,7 +286,7 @@ add_action('admin_init', function () {
       </div>', aesirx_analytics_escape_html());
       echo wp_kses('
       <button type="button" class="reset_detail_button aesirx_btn_success_light">
-        <img width="20px" height="20px" src="'. plugins_url( 'aesirx-consent/assets/images-plugin/reset_icon.png').'" />
+        <img width="20px" height="20px" src="'. plugins_url('assets/images-plugin/reset_icon.png', __DIR__).'" />
         '.esc_html__("Reset Detail", 'aesirx-consent').'
       </button>', aesirx_analytics_escape_html());
     },
@@ -312,7 +312,7 @@ add_action('admin_init', function () {
       </div>', aesirx_analytics_escape_html());
       echo wp_kses('
       <button type="button" class="reset_reject_button aesirx_btn_success_light">
-        <img width="20px" height="20px" src="'. plugins_url( 'aesirx-consent/assets/images-plugin/reset_icon.png').'" />
+        <img width="20px" height="20px" src="'. plugins_url('assets/images-plugin/reset_icon.png', __DIR__).'" />
         '.esc_html__("Reset Reject", 'aesirx-consent').'
       </button>', aesirx_analytics_escape_html());
     },
@@ -329,7 +329,7 @@ add_action('admin_init', function () {
     esc_html__('AesirX Consent Shield for Third-Party Plugins ', 'aesirx-consent'),
     function () {
       $options = get_option('aesirx_analytics_plugin_options', []);
-      $installed_plugins = get_plugins();
+      $installed_plugins = aesirx_get_installed_plugins();
       $active_plugins = get_option('active_plugins');
       echo wp_kses('<p class="small-description mb-10">'.esc_html__('Blocks selected third-party plugins from loading until user consent is given.', 'aesirx-consent').'</p>', aesirx_analytics_escape_html());
       echo wp_kses("<input name='aesirx_analytics_plugin_options[blocking_cookies_plugins][]' value='' type='hidden' />", aesirx_analytics_escape_html()); 
@@ -366,13 +366,13 @@ add_action('admin_init', function () {
       echo '</div>';
       echo wp_kses("
         <div class='aesirx_consent_info_wrapper'>
-          <img width='20px' height='20px' src='". plugins_url( 'aesirx-consent/assets/images-plugin/shield_icon.png')."' />
+          <img width='20px' height='20px' src='". plugins_url('assets/images-plugin/shield_icon.png', __DIR__)."' />
           <div class='aesirx_consent_info_content small-description'>
             ".sprintf(__("Completely prevents the loading and execution of chosen third-party plugins before consent.", 'aesirx-consent'))."
           </div>
         </div>
         <div class='aesirx_consent_info_wrapper'>
-          <img width='20px' height='20px' src='". plugins_url( 'aesirx-consent/assets/images-plugin/shield_icon.png')."' />
+          <img width='20px' height='20px' src='". plugins_url('assets/images-plugin/shield_icon.png', __DIR__)."' />
           <div class='aesirx_consent_info_content small-description'>
             ".sprintf(__("No network requests are made to third-party servers, enabling maximum compliance with privacy regulations like GDPR and the ePrivacy Directive.", 'aesirx-consent'))."
           </div>
@@ -412,7 +412,7 @@ add_action('admin_init', function () {
                 <option value="custom" '.($options['blocking_cookies_category'][$key] === 'custom' ? 'selected' : '').'>Custom</option>
               </select>
               <button class="aesirx-consent-remove-cookies-row">
-                <img width="25px" height="30px" src="'. plugins_url( 'aesirx-consent/assets/images-plugin/trash_icon.png').'" />
+                <img width="25px" height="30px" src="'. plugins_url('assets/images-plugin/trash_icon.png', __DIR__).'" />
               </button>
             </div>
             ', aesirx_analytics_escape_html());
@@ -430,7 +430,7 @@ add_action('admin_init', function () {
             <option value="custom">Custom</option>
           </select>
           <button class="aesirx-consent-remove-cookies-row">
-            <img width="25px" height="30px" src="'. plugins_url( 'aesirx-consent/assets/images-plugin/trash_icon.png').'" />
+            <img width="25px" height="30px" src="'. plugins_url('assets/images-plugin/trash_icon.png', __DIR__).'" />
           </button>
         </div>
         ', aesirx_analytics_escape_html());
@@ -438,17 +438,17 @@ add_action('admin_init', function () {
       echo '</div>';
       echo wp_kses("
       <button id='aesirx-consent-add-cookies-row'>
-        <img width='23px' height='30px' src='". plugins_url( 'aesirx-consent/assets/images-plugin/plus_icon_green.png')."' />
+        <img width='23px' height='30px' src='". plugins_url('assets/images-plugin/plus_icon_green.png', __DIR__)."' />
       </button>", aesirx_analytics_escape_html());
       echo wp_kses("
       <div class='aesirx_consent_info_wrapper'>
-        <img width='20px' height='20px' src='". plugins_url( 'aesirx-consent/assets/images-plugin/shield_icon.png')."' />
+        <img width='20px' height='20px' src='". plugins_url('assets/images-plugin/shield_icon.png', __DIR__)."' />
         <div class='aesirx_consent_info_content small-description'>
           ".sprintf(__("Blocks or removes scripts from running in the user's browser before consent is given.", 'aesirx-consent'))."
         </div>
       </div>
       <div class='aesirx_consent_info_wrapper'>
-        <img width='20px' height='20px' src='". plugins_url( 'aesirx-consent/assets/images-plugin/shield_icon.png')."' />
+        <img width='20px' height='20px' src='". plugins_url('assets/images-plugin/shield_icon.png', __DIR__)."' />
         <div class='aesirx_consent_info_content small-description'>
           ".sprintf(__("While it prevents scripts from executing, initial network requests may still occur, so it enhances privacy compliance under GDPR but may not fully meet the ePrivacy Directive requirements.", 'aesirx-consent'))."
         </div>
@@ -539,22 +539,6 @@ add_action('admin_init', function () {
           </label>
       </div>
         ', aesirx_analytics_escape_html());
-        echo '
-        <script>
-          jQuery(document).ready(function() {
-            function switch_radio(val) {
-              if (val === "opt-out") {
-                jQuery(".aesirx_consent_gpc_consent_donotsell_row").show();
-              } else {
-                jQuery(".aesirx_consent_gpc_consent_donotsell_row").hide();
-              }
-            }
-            jQuery("input.gpc_consent_class").click(function() {
-              switch_radio(jQuery(this).val())
-            });
-            switch_radio("' . esc_html($mode) . '");
-          });
-        </script>';
     },
     'aesirx_consent_gpc_plugin',
     'aesirx_consent_gpc_settings',
@@ -819,7 +803,7 @@ add_action('admin_init', function () {
           <div class="aesirx_infor_wrapper">
             AND / OR
             <div class="input_information">
-              <img width="20px" height="20px" src="'. plugins_url( 'aesirx-consent/assets/images-plugin/infor_icon.png').'" />
+              <img width="20px" height="20px" src="'. plugins_url('assets/images-plugin/infor_icon.png', __DIR__).'" />
               <div class="input_information_content xl">
                 <div>'.esc_html__('Choose how browser language and time zone are combined to determine consent rules:', 'aesirx-consent').'</div>
                 <ul>
@@ -845,7 +829,7 @@ add_action('admin_init', function () {
               . '<div>' . aesirx_analytics_render_select('aesirx_consent_geo_plugin_options[geo_rules_override][]', $overrides, $options['geo_rules_override'][$key],'-- Override') . '</div>'
               . '<div>
                   <button class="aesirx-consent-remove-rules-row">
-                    <img width="25px" height="30px" src="' . plugins_url('aesirx-consent/assets/images-plugin/trash_icon.png') . '" />
+                    <img width="25px" height="30px" src="' . plugins_url('assets/images-plugin/trash_icon.png', __DIR__) . '" />
                   </button>
                 </div>'
             . '</div>',
@@ -862,7 +846,7 @@ add_action('admin_init', function () {
             . '<div>' . aesirx_analytics_render_select('aesirx_consent_geo_plugin_options[geo_rules_override][]', $overrides, '', '-- '.esc_html__('Override', 'aesirx-consent').'') . '</div>'
             . '<div>
                 <button class="aesirx-consent-remove-rules-row">
-                  <img width="25px" height="30px" src="' . plugins_url('aesirx-consent/assets/images-plugin/trash_icon.png') . '" />
+                  <img width="25px" height="30px" src="' . plugins_url('assets/images-plugin/trash_icon.png', __DIR__) . '" />
                 </button>
               </div>'
           . '</div>',
@@ -873,7 +857,7 @@ add_action('admin_init', function () {
 
       echo wp_kses(
         "<button id='aesirx-consent-add-rules-row'>
-          <img width='23px' height='30px' src='" . plugins_url('aesirx-consent/assets/images-plugin/plus_icon_green.png') . "' />
+          <img width='23px' height='30px' src='" . plugins_url('assets/images-plugin/plus_icon_green.png', __DIR__) . "' />
           Add New Rule
         </button>",
         aesirx_analytics_escape_html()
@@ -892,17 +876,17 @@ add_action('admin_init', function () {
       // using custom function to escape HTML
       echo wp_kses("
       <div class='aesirx_consent_info'>
-        <img class='aesirx_consent_banner' width='334px' height='175px' src='". plugins_url( 'aesirx-consent/assets/images-plugin/banner_3.png')."' />
+        <img class='aesirx_consent_banner' width='334px' height='175px' src='". plugins_url('assets/images-plugin/banner_3.png', __DIR__)."' />
         <div class='wrap'>
           <p class='aesirx_consent_title'>".esc_html__("Need Help? Access Our Comprehensive Documentation Hub", 'aesirx-consent')."</p>
           <div class='aesirx_consent_info_wrapper'>
-            <img class='banner' width='20px' height='20px' src='". plugins_url( 'aesirx-consent/assets/images-plugin/plus_icon.png')."' />
+            <img class='banner' width='20px' height='20px' src='". plugins_url('assets/images-plugin/plus_icon.png', __DIR__)."' />
             <div class='aesirx_consent_info_content'>
               ".sprintf(__("Explore How-To Guides, instructions, & tutorials to get the most from AesirX Consent Shield. Whether you're a developer or admin, find all you need to configure & optimize your privacy setup.", 'aesirx-consent'))."
             </div>
           </div>
           <div class='aesirx_consent_info_wrapper'>
-            <img width='20px' height='20px' src='". plugins_url( 'aesirx-consent/assets/images-plugin/plus_icon.png')."' />
+            <img width='20px' height='20px' src='". plugins_url('assets/images-plugin/plus_icon.png', __DIR__)."' />
             <div class='aesirx_consent_info_content'>
               ".esc_html__("Discover the latest features & best practices.", 'aesirx-consent')."
             </div>
@@ -910,7 +894,7 @@ add_action('admin_init', function () {
         </div>
         <a class='aesirx_btn_success' target='_blank' href='https://aesirx.io/documentation'>
           Access Doc Hub
-          <img width='20px' height='20px' src='". plugins_url( 'aesirx-consent/assets/images-plugin/external_link_icon.png')."' />
+          <img width='20px' height='20px' src='". plugins_url('assets/images-plugin/external_link_icon.png', __DIR__)."' />
         </a>
       </div>", aesirx_analytics_escape_html());
     },
@@ -925,11 +909,11 @@ add_action('admin_init', function () {
       $urlScanner = esc_url(add_query_arg('page', 'aesirx-cmp-scanner', get_admin_url() . 'admin.php'));
       echo wp_kses("
       <div class='aesirx_consent_scanner'>
-        <img class='aesirx_consent_banner mb-20' width='334px' height='175px' src='". plugins_url( 'aesirx-consent/assets/images-plugin/banner_2.png')."' />
+        <img class='aesirx_consent_banner mb-20' width='334px' height='175px' src='". plugins_url('assets/images-plugin/banner_2.png', __DIR__)."' />
         <p class='aesirx_consent_title'>".esc_html__("Learn how to use AesirX Privacy Scanner with Consent Shield to detect privacy-intrusive elements, using the JetPack plugin as an example.", 'aesirx-consent')."</p>
         <a class='aesirx_btn_success_light' target='_blank' href='https://aesirx.io/documentation/cmp/how-to/jetpack-gdpr-compliance-with-aesirx-cmp'>
           Read the How-To Guide
-          <img width='20px' height='20px' src='". plugins_url( 'aesirx-consent/assets/images-plugin/book_icon.png')."' />
+          <img width='20px' height='20px' src='". plugins_url('assets/images-plugin/book_icon.png', __DIR__)."' />
         </a>
       </div>", aesirx_analytics_escape_html());
     },
@@ -977,7 +961,7 @@ add_action('admin_menu', function () {
           <button type="submit" class="submit_button aesirx_btn_success">
             <?php
               echo wp_kses("
-                <img width='20px' height='20px' src='". plugins_url( 'aesirx-consent/assets/images-plugin/save_icon.png')."' />
+                <img width='20px' height='20px' src='". plugins_url('assets/images-plugin/save_icon.png', __DIR__)."' />
                 ".esc_html__("Save settings", 'aesirx-consent')."
               ", aesirx_analytics_escape_html()); 
             ?>
@@ -991,7 +975,7 @@ add_action('admin_menu', function () {
         echo '</div>';
         echo '</div>';
     },
-    plugins_url( 'aesirx-consent/assets/images-plugin/AesirX_BI_icon.png'),
+    plugins_url('assets/images-plugin/AesirX_BI_icon.png', __DIR__),
     75
   );
   add_submenu_page(
@@ -1038,7 +1022,7 @@ add_action('admin_menu', function () {
           <button type="submit" class="submit_button aesirx_btn_success">
             <?php
               echo wp_kses("
-                <img width='20px' height='20px' src='". plugins_url( 'aesirx-consent/assets/images-plugin/save_icon.png')."' />
+                <img width='20px' height='20px' src='". plugins_url('assets/images-plugin/save_icon.png', __DIR__)."' />
                 ".esc_html__("Save settings", 'aesirx-consent')."
               ", aesirx_analytics_escape_html()); 
             ?>
@@ -1071,7 +1055,7 @@ add_action('admin_menu', function () {
           <button type="submit" class="submit_button aesirx_btn_success">
             <?php
               echo wp_kses("
-                <img width='20px' height='20px' src='". plugins_url( 'aesirx-consent/assets/images-plugin/save_icon.png')."' />
+                <img width='20px' height='20px' src='". plugins_url('assets/images-plugin/save_icon.png', __DIR__)."' />
                 ".esc_html__("Save settings", 'aesirx-consent')."
               ", aesirx_analytics_escape_html()); 
             ?>
@@ -1104,7 +1088,7 @@ add_action('admin_menu', function () {
           <button type="submit" class="submit_button aesirx_btn_success">
             <?php
               echo wp_kses("
-                <img width='20px' height='20px' src='". plugins_url( 'aesirx-consent/assets/images-plugin/save_icon.png')."' />
+                <img width='20px' height='20px' src='". plugins_url('assets/images-plugin/save_icon.png', __DIR__)."' />
                 ".esc_html__("Save settings", 'aesirx-consent')."
               ", aesirx_analytics_escape_html()); 
             ?>
@@ -1121,6 +1105,10 @@ add_action('admin_enqueue_scripts', function ($hook) {
   if ($hook === "aesirx-cmp_page_aesirx-cmp-geo") {
     wp_register_script('aesirx_analytics_geo', plugins_url('assets/vendor/aesirx-consent-geo.js', __DIR__), array('jquery'), AESIRX_CONSENT_VERSION, true);
     wp_enqueue_script('aesirx_analytics_geo');
+  }
+   if ($hook === "aesirx-cmp_page_aesirx-cmp-gpc") {
+    wp_register_script('aesirx_analytics_gpc', plugins_url('assets/vendor/aesirx-consent-gpc.js', __DIR__), array('jquery'), AESIRX_CONSENT_VERSION, true);
+    wp_enqueue_script('aesirx_analytics_gpc');
   }
   if ($hook === 'toplevel_page_aesirx-consent-management-plugin' || $hook === "aesirx-cmp_page_aesirx-cmp-modal") {
     wp_enqueue_script('aesirx_analytics_ckeditor', 'https://api.aesirx.io/images/js/aesirx-consent-ckeditor.js', array('jquery'), true, true);
@@ -1213,8 +1201,6 @@ add_action('admin_enqueue_scripts', function ($hook) {
       }
     }
 
-    $jwt = '';
-
     wp_register_script( 'aesrix_bi_window', '', array(), '1.0', false );
 
     wp_enqueue_script('aesrix_bi_window');
@@ -1225,8 +1211,7 @@ add_action('admin_enqueue_scripts', function ($hook) {
       window.env.REACT_APP_BI_ENDPOINT_URL = "' . esc_url($endpoint) . '";
 		  window.env.REACT_APP_DATA_STREAM = JSON.stringify(' . wp_json_encode($streams) . ');
 		  window.env.PUBLIC_URL= "' . esc_url(plugin_dir_url(__DIR__)) . '";
-      window.env.STORAGE= "internal";
-      ' . htmlspecialchars($jwt, ENT_NOQUOTES),
+      window.env.STORAGE= "internal";',
     );
   }
 });

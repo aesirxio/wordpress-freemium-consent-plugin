@@ -7,8 +7,10 @@ Class AesirX_Analytics_Get_Total_Consent_Category extends AesirxAnalyticsMysqlHe
 {
     function aesirx_analytics_mysql_execute($params = [])
     {
+        global $wpdb;
         $where_clause = [];
         $bind = [];
+        $wpPrefix = $wpdb->prefix;
 
         parent::aesirx_analytics_add_category_consent_filters($params, $where_clause, $bind);
         $sql =
@@ -20,8 +22,8 @@ Class AesirX_Analytics_Get_Total_Consent_Category extends AesirxAnalyticsMysqlHe
         FROM (
             -- Count from allow column
             SELECT category_consent.allow AS category, COUNT(*) AS allow_count, 0 AS reject_count
-            FROM `#__analytics_category_consent` AS category_consent 
-            LEFT JOIN `#__analytics_visitors` AS visitors ON visitors.uuid = category_consent.uuid 
+            FROM `{$wpPrefix}analytics_category_consent` AS category_consent 
+            LEFT JOIN `{$wpPrefix}analytics_visitors` AS visitors ON visitors.uuid = category_consent.uuid 
             WHERE " . implode(' AND ', $where_clause) ." AND category_consent.allow IS NOT NULL
             GROUP BY category_consent.allow
         
@@ -29,8 +31,8 @@ Class AesirX_Analytics_Get_Total_Consent_Category extends AesirxAnalyticsMysqlHe
         
             -- Count from reject column
             SELECT category_consent.reject AS category, 0 AS allow_count, COUNT(*) AS reject_count
-            FROM `#__analytics_category_consent` AS category_consent 
-            LEFT JOIN `#__analytics_visitors` AS visitors ON visitors.uuid = category_consent.uuid 
+            FROM `{$wpPrefix}analytics_category_consent` AS category_consent 
+            LEFT JOIN `{$wpPrefix}analytics_visitors` AS visitors ON visitors.uuid = category_consent.uuid 
             WHERE " . implode(' AND ', $where_clause) ." AND category_consent.reject IS NOT NULL
             GROUP BY category_consent.reject
        

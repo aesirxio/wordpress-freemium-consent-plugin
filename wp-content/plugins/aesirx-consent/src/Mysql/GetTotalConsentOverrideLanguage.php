@@ -7,9 +7,11 @@ Class AesirX_Analytics_Get_Total_Consent_Override_Language extends AesirxAnalyti
 {
     function aesirx_analytics_mysql_execute($params = [])
     {
+        global $wpdb;
         $where_clause = [];
         $where_clause_2 = [];
         $bind = [];
+        $wpPrefix = $wpdb->prefix;
 
         parent::aesirx_analytics_add_region_consent_filters($params, $where_clause, $bind, $where_clause_2);
         $sql = 
@@ -26,7 +28,7 @@ Class AesirX_Analytics_Get_Total_Consent_Override_Language extends AesirxAnalyti
             
                 COUNT(DISTINCT CONCAT(c.visitor_uuid, '|', c.datetime)) AS total_consent
             FROM
-                `#__analytics_visitor_consent` c
+                `{$wpPrefix}analytics_visitor_consent` c
             JOIN
               wp_analytics_visitors v ON c.visitor_uuid = v.uuid
             WHERE " . implode(" AND ", $where_clause) ."";

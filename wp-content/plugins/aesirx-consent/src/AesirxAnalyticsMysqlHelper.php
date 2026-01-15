@@ -15,9 +15,6 @@ if (!class_exists('AesirxAnalyticsMysqlHelper')) {
             $skip = ($page - 1) * $pageSize;
         
             $sql .= " LIMIT " . $skip . ", " . $pageSize;
-    
-            $sql = str_replace("#__", $wpdb->prefix, $sql);
-            $total_sql = str_replace("#__", $wpdb->prefix, $total_sql);
 
             // used placeholders and $wpdb->prepare() in variable $total_sql
             // doing direct database calls to custom tables
@@ -104,15 +101,15 @@ if (!class_exists('AesirxAnalyticsMysqlHelper')) {
     
         public function aesirx_analytics_get_statistics_per_field($groups = [], $selects = [], $params = []) {
             global $wpdb;
-    
+            $wpPrefix = $wpdb->prefix;
             $select = [
-                "coalesce(COUNT(DISTINCT (#__analytics_events.visitor_uuid)), 0) as number_of_visitors",
-                "coalesce(COUNT(#__analytics_events.visitor_uuid), 0) as total_number_of_visitors",
-                "COUNT(#__analytics_events.uuid) as number_of_page_views",
-                "COUNT(DISTINCT (#__analytics_events.url)) AS number_of_unique_page_views",
-                "coalesce(SUM(TIMESTAMPDIFF(SECOND, #__analytics_events.start, #__analytics_events.end)) / count(distinct #__analytics_visitors.uuid), 0) DIV 1 as average_session_duration",
-                "coalesce((COUNT(#__analytics_events.uuid) / COUNT(DISTINCT (#__analytics_events.flow_uuid))), 0) DIV 1 as average_number_of_pages_per_session",
-                "coalesce((count(DISTINCT CASE WHEN #__analytics_flows.multiple_events = 0 THEN #__analytics_flows.uuid END) * 100) / count(DISTINCT (#__analytics_flows.uuid)), 0) DIV 1 as bounce_rate",
+                "coalesce(COUNT(DISTINCT ({$wpPrefix}analytics_events.visitor_uuid)), 0) as number_of_visitors",
+                "coalesce(COUNT({$wpPrefix}analytics_events.visitor_uuid), 0) as total_number_of_visitors",
+                "COUNT({$wpPrefix}analytics_events.uuid) as number_of_page_views",
+                "COUNT(DISTINCT ({$wpPrefix}analytics_events.url)) AS number_of_unique_page_views",
+                "coalesce(SUM(TIMESTAMPDIFF(SECOND, {$wpPrefix}analytics_events.start, {$wpPrefix}analytics_events.end)) / count(distinct {$wpPrefix}analytics_visitors.uuid), 0) DIV 1 as average_session_duration",
+                "coalesce((COUNT({$wpPrefix}analytics_events.uuid) / COUNT(DISTINCT ({$wpPrefix}analytics_events.flow_uuid))), 0) DIV 1 as average_number_of_pages_per_session",
+                "coalesce((count(DISTINCT CASE WHEN {$wpPrefix}analytics_flows.multiple_events = 0 THEN {$wpPrefix}analytics_flows.uuid END) * 100) / count(DISTINCT ({$wpPrefix}analytics_flows.uuid)), 0) DIV 1 as bounce_rate",
             ];
     
             $total_select = [];
@@ -125,7 +122,7 @@ if (!class_exists('AesirxAnalyticsMysqlHelper')) {
                 $total_select[] = "COUNT(DISTINCT " . implode(', COALESCE(', $groups) . ") AS total";
             }
             else {
-                $total_select[] = "COUNT(#__analytics_events.uuid) AS total";
+                $total_select[] = "COUNT({$wpPrefix}analytics_events.uuid) AS total";
             }
     
             foreach ($selects as $additional_result) {
@@ -133,8 +130,8 @@ if (!class_exists('AesirxAnalyticsMysqlHelper')) {
             }
     
             $where_clause = [
-                "#__analytics_events.event_name = %s",
-                "#__analytics_events.event_type = %s",
+                "{$wpPrefix}analytics_events.event_name = %s",
+                "{$wpPrefix}analytics_events.event_type = %s",
             ];
     
             $bind = [
@@ -156,18 +153,18 @@ if (!class_exists('AesirxAnalyticsMysqlHelper')) {
             }
     
             if ($acquisition) {
-                $where_clause[] = "#__analytics_flows.multiple_events = %d";
+                $where_clause[] = "{$wpPrefix}analytics_flows.multiple_events = %d";
                 $bind[] = 0;
             }
     
-            $total_sql = "SELECT " . implode(", ", $total_select) . " FROM #__analytics_events
-                        LEFT JOIN #__analytics_visitors ON #__analytics_visitors.uuid = #__analytics_events.visitor_uuid
-                        LEFT JOIN #__analytics_flows ON #__analytics_flows.uuid = #__analytics_events.flow_uuid
+            $total_sql = "SELECT " . implode(", ", $total_select) . " FROM {$wpPrefix}analytics_events
+                        LEFT JOIN {$wpPrefix}analytics_visitors ON {$wpPrefix}analytics_visitors.uuid = {$wpPrefix}analytics_events.visitor_uuid
+                        LEFT JOIN {$wpPrefix}analytics_flows ON {$wpPrefix}analytics_flows.uuid = {$wpPrefix}analytics_events.flow_uuid
                         WHERE " . implode(" AND ", $where_clause);
     
-            $sql = "SELECT " . implode(", ", $select) . " FROM #__analytics_events
-                    LEFT JOIN #__analytics_visitors ON #__analytics_visitors.uuid = #__analytics_events.visitor_uuid
-                    LEFT JOIN #__analytics_flows ON #__analytics_flows.uuid = #__analytics_events.flow_uuid
+            $sql = "SELECT " . implode(", ", $select) . " FROM {$wpPrefix}analytics_events
+                    LEFT JOIN {$wpPrefix}analytics_visitors ON {$wpPrefix}analytics_visitors.uuid = {$wpPrefix}analytics_events.visitor_uuid
+                    LEFT JOIN {$wpPrefix}analytics_flows ON {$wpPrefix}analytics_flows.uuid = {$wpPrefix}analytics_events.flow_uuid
                     WHERE " . implode(" AND ", $where_clause);
     
             if (!empty($groups)) {
@@ -237,6 +234,8 @@ if (!class_exists('AesirxAnalyticsMysqlHelper')) {
         }
     
         function aesirx_analytics_add_filters($params, &$where_clause, &$bind) {
+            global $wpdb;
+            $wpPrefix = $wpdb->prefix;
             foreach ([$params['filter'] ?? null, $params['filter_not'] ?? null] as $filter_array) {
                 $is_not = $filter_array === (isset($params['filter_not']) ? $params['filter_not'] : null);
                 if (empty($filter_array)) {
@@ -249,7 +248,7 @@ if (!class_exists('AesirxAnalyticsMysqlHelper')) {
                     switch ($key) {
                         case 'start':
                             try {
-                                $where_clause[] = "UNIX_TIMESTAMP(#__analytics_events." . $key . ") >= %d";
+                                $where_clause[] = "UNIX_TIMESTAMP({$wpPrefix}analytics_events." . $key . ") >= %d";
                                 $bind[] = strtotime($list[0]);
                             } catch (Exception $e) {
                                 return new WP_Error('validation_error', esc_html__('"start" filter is not correct', 'aesirx-consent'), ['status' => 400]);
@@ -257,7 +256,7 @@ if (!class_exists('AesirxAnalyticsMysqlHelper')) {
                             break;
                         case 'end':
                             try {
-                                $where_clause[] = "UNIX_TIMESTAMP(#__analytics_events." . $key . ") < %d";
+                                $where_clause[] = "UNIX_TIMESTAMP({$wpPrefix}analytics_events." . $key . ") < %d";
                                 $bind[] = strtotime($list[0] . ' +1 day');
                             } catch (Exception $e) {
                                 return new WP_Error('validation_error', esc_html__('"end" filter is not correct', 'aesirx-consent'), ['status' => 400]);
@@ -265,7 +264,7 @@ if (!class_exists('AesirxAnalyticsMysqlHelper')) {
                             break;
                         case 'event_name':
                         case 'event_type':
-                            $where_clause[] = '#__analytics_events.' . $key . ' ' . ($is_not ? 'NOT ' : '') . 'IN (%s)';
+                            $where_clause[] = $wpPrefix .'analytics_events.' . $key . ' ' . ($is_not ? 'NOT ' : '') . 'IN (%s)';
                             $bind[] = implode(', ', $list);
                             break;
                         case 'city':
@@ -279,7 +278,7 @@ if (!class_exists('AesirxAnalyticsMysqlHelper')) {
                         case 'device':
                         case 'timezone':
                         case 'lang':
-                            $where_clause[] = '#__analytics_visitors.' . $key . ' ' . ($is_not ? 'NOT ' : '') . 'IN (%s)';
+                            $where_clause[] = $wpPrefix .'analytics_visitors.' . $key . ' ' . ($is_not ? 'NOT ' : '') . 'IN (%s)';
                             $bind[] = implode(', ', $list);
                             break;
                         default:
@@ -290,6 +289,8 @@ if (!class_exists('AesirxAnalyticsMysqlHelper')) {
         }
     
         function aesirx_analytics_add_attribute_filters($params, &$where_clause, &$bind) {
+            global $wpdb;
+            $wpPrefix = $wpdb->prefix;
             foreach ([$params['filter'] ?? null, $params['filter_not'] ?? null]as $filter_array) {
                 $is_not = $filter_array === (isset($params['filter_not']) ? $params['filter_not'] : null);
                 if (empty($filter_array)) {
@@ -301,21 +302,21 @@ if (!class_exists('AesirxAnalyticsMysqlHelper')) {
                     switch ($key) {
                         case "attribute_name":
                             if ($is_not) {
-                                $where_clause[] = '#__analytics_event_attributes.event_uuid IS NULL 
-                                    OR #__analytics_event_attributes.name NOT IN (%s)';
+                                $where_clause[] = "{$wpPrefix}analytics_event_attributes.event_uuid IS NULL 
+                                    OR {$wpPrefix}analytics_event_attributes.name NOT IN (%s)";
                                 $bind[] = implode(', ', $list);
                             } else {
-                                $where_clause[] = '#__analytics_event_attributes.name IN (%s)';
+                                $where_clause[] = "{$wpPrefix}analytics_event_attributes.name IN (%s)";
                                 $bind[] = implode(', ', $list);
                             }
                             break;
                         case "attribute_value":
                             if ($is_not) {
-                                $where_clause[] = '#__analytics_event_attributes.event_uuid IS NULL 
-                                    OR #__analytics_event_attributes.value NOT IN (%s)';
+                                $where_clause[] = "{$wpPrefix}analytics_event_attributes.event_uuid IS NULL 
+                                    OR {$wpPrefix}analytics_event_attributes.value NOT IN (%s)";
                                 $bind[] = implode(', ', $list);
                             } else {
-                                $where_clause[] = '#__analytics_event_attributes.value IN (%s)';
+                                $where_clause[] = "{$wpPrefix}analytics_event_attributes.value IN (%s)";
                                 $bind[] = implode(', ', $list);
                             }
                             break;
@@ -693,13 +694,15 @@ if (!class_exists('AesirxAnalyticsMysqlHelper')) {
         }
     
         function aesirx_analytics_add_conversion_filters($params, &$where_clause, &$bind) {
+            global $wpdb;
+            $wpPrefix = $wpdb->prefix;
             foreach ($params['filter'] as $key => $vals) {
                 $list = is_array($vals) ? $vals : [$vals];
     
                 switch ($key) {
                     case 'start':
                         try {
-                            $where_clause[] = "UNIX_TIMESTAMP(#__analytics_flows." . $key . ") >= %d";
+                            $where_clause[] = "UNIX_TIMESTAMP({$wpPrefix}analytics_flows." . $key . ") >= %d";
                             $bind[] = strtotime($list[0]);
                         } catch (Exception $e) {
                             return new WP_Error('validation_error', esc_html__('"start" filter is not correct', 'aesirx-consent'), ['status' => 400]);
@@ -707,7 +710,7 @@ if (!class_exists('AesirxAnalyticsMysqlHelper')) {
                         break;
                     case 'end':
                         try {
-                            $where_clause[] = "UNIX_TIMESTAMP(#__analytics_flows." . $key . ") < %d";
+                            $where_clause[] = "UNIX_TIMESTAMP({$wpPrefix}analytics_flows." . $key . ") < %d";
                             $bind[] = strtotime($list[0] . ' +1 day');
                         } catch (Exception $e) {
                             return new WP_Error('validation_error', esc_html__('"end" filter is not correct', 'aesirx-consent'), ['status' => 400]);
@@ -1391,41 +1394,6 @@ if (!class_exists('AesirxAnalyticsMysqlHelper')) {
             $data = json_decode($body, true);
 
             return $data;
-        }
-
-        function aesirx_analytics_fetch_open_graph_data($url) {
-            $response = wp_remote_get($url);
-        
-            if (is_wp_error($response)) {
-                return null;
-            }
-        
-            $html = wp_remote_retrieve_body($response);
-        
-            if (empty($html)) {
-                return null;
-            }
-        
-            require_once ABSPATH . WPINC . '/class-simplepie.php';
-            $parser = new \SimplePie();
-            $parser->set_raw_data($html);
-            $parser->init();
-        
-            $og_data = [];
-            $title = $parser->get_title();
-            if (!empty($title)) {
-                $og_data['og:title'] = $title;
-            }
-            $description = $parser->get_description();
-            if (!empty($description)) {
-                $og_data['og:description'] = $description;
-            }
-            $image = $parser->get_image_url();
-            if (!empty($image)) {
-                $og_data['og:image'] = $image;
-            }
-        
-            return $og_data;
         }
     }
 }

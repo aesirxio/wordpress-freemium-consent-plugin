@@ -7,8 +7,10 @@ Class AesirX_Analytics_Get_Total_Consent_Category_Per_Day extends AesirxAnalytic
 {
     function aesirx_analytics_mysql_execute($params = [])
     {
+        global $wpdb;
         $where_clause = [];
         $bind = [];
+        $wpPrefix = $wpdb->prefix;
 
         parent::aesirx_analytics_add_category_consent_filters($params, $where_clause, $bind);
 
@@ -27,8 +29,8 @@ Class AesirX_Analytics_Get_Total_Consent_Category_Per_Day extends AesirxAnalytic
             SUM(CASE WHEN category_consent.reject = 'functional' THEN 1 ELSE 0 END) AS reject_functional,
             SUM(CASE WHEN category_consent.reject = 'custom' THEN 1 ELSE 0 END) AS reject_custom
 
-          FROM `#__analytics_category_consent` AS category_consent
-          LEFT JOIN `#__analytics_visitors` AS visitors ON visitors.uuid = category_consent.uuid
+          FROM `{$wpPrefix}analytics_category_consent` AS category_consent
+          LEFT JOIN `{$wpPrefix}analytics_visitors` AS visitors ON visitors.uuid = category_consent.uuid
           WHERE " . implode(" AND ", $where_clause) . "
           GROUP BY DATE(category_consent.datetime)";
 

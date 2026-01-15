@@ -12,6 +12,8 @@ Class AesirX_Analytics_Get_All_Consents extends AesirxAnalyticsMysqlHelper
         $where_clause = ["COALESCE(consent.consent, visitor_consent.consent) = %d"];
         $bind = [1];
 
+        $wpPrefix = $wpdb->prefix;
+
         parent::aesirx_analytics_add_consent_filters($params, $where_clause, $bind);
 
         $sql =
@@ -33,18 +35,18 @@ Class AesirX_Analytics_Get_All_Consents extends AesirxAnalyticsMysqlHelper
             WHEN consent.web3id IS NULL AND consent.wallet_uuid IS NOT NULL THEN 3 
             WHEN consent.web3id IS NOT NULL AND consent.wallet_uuid IS NULL THEN 2 
             ELSE 1 END AS tier 
-            FROM `#__analytics_visitor_consent` AS visitor_consent 
-            LEFT JOIN `#__analytics_visitors` AS visitors ON visitors.uuid = visitor_consent.visitor_uuid 
-            LEFT JOIN `#__analytics_consent` AS consent ON consent.uuid = visitor_consent.consent_uuid 
-            LEFT JOIN #__analytics_wallet AS wallet ON wallet.uuid = consent.wallet_uuid 
+            FROM `{$wpPrefix}analytics_visitor_consent` AS visitor_consent 
+            LEFT JOIN `{$wpPrefix}analytics_visitors` AS visitors ON visitors.uuid = visitor_consent.visitor_uuid 
+            LEFT JOIN `{$wpPrefix}analytics_consent` AS consent ON consent.uuid = visitor_consent.consent_uuid 
+            LEFT JOIN {$wpPrefix}analytics_wallet AS wallet ON wallet.uuid = consent.wallet_uuid 
             WHERE " . implode(" AND ", $where_clause);
 
         $total_sql =
             "SELECT COUNT(visitor_consent.uuid) AS total 
-            FROM `#__analytics_visitor_consent` AS visitor_consent 
-            LEFT JOIN `#__analytics_visitors` AS visitors ON visitors.uuid = visitor_consent.visitor_uuid 
-            LEFT JOIN `#__analytics_consent` AS consent ON consent.uuid = visitor_consent.consent_uuid 
-            LEFT JOIN #__analytics_wallet AS wallet ON wallet.uuid = consent.wallet_uuid 
+            FROM `{$wpPrefix}analytics_visitor_consent` AS visitor_consent 
+            LEFT JOIN `{$wpPrefix}analytics_visitors` AS visitors ON visitors.uuid = visitor_consent.visitor_uuid 
+            LEFT JOIN `{$wpPrefix}analytics_consent` AS consent ON consent.uuid = visitor_consent.consent_uuid 
+            LEFT JOIN {$wpPrefix}analytics_wallet AS wallet ON wallet.uuid = consent.wallet_uuid 
             WHERE " . implode(" AND ", $where_clause);
 
         $sort = self::aesirx_analytics_add_sort(

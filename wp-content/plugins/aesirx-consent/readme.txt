@@ -1,5 +1,5 @@
 === AesirX Consent ===
-Contributors: aesirx,vikingtechguy,vietnguyen1406,devphutran
+Contributors: nixa999,aesirx,vikingtechguy,vietnguyen1406,devphutran
 Tags: privacy, compliance, wordpress consent, consent, cmp
 Requires at least: 5.9
 Tested up to: 6.9
