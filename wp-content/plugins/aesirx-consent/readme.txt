@@ -3,7 +3,7 @@ Contributors: nixa999,aesirx,vikingtechguy,vietnguyen1406,devphutran
 Tags: privacy, compliance, wordpress consent, consent, cmp
 Requires at least: 5.9
 Tested up to: 6.9
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 Requires PHP: 7.4
 License: GPL 3.0
 
@@ -75,5 +75,14 @@ Privacy policy: https://aesirx.io/privacy-policy
 
 == Changelog ==
 
+= 1.0.1 =
+* Fix multiple language
+
 = 1.0.0 =
 * AesirX Freemium Consent
+
+== Screenshots ==
+1. Acquisition - See how visitors find and engage with the website.
+2. Behavior - Understand how people interact with the site.
+3. Tracking - Measure the performance of marketing campaigns.
+4. Visitor - Gain insights into audience demographics and behaviors.

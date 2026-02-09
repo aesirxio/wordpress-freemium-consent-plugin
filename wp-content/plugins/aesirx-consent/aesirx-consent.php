@@ -3,7 +3,7 @@
  * Plugin Name: AesirX Consent
  * Plugin URI: https://analytics.aesirx.io?utm_source=wpplugin&utm_medium=web&utm_campaign=wordpress&utm_id=aesirx&utm_term=wordpress&utm_content=analytics
  * Description: Aesirx Consent plugin. When you join forces with AesirX, you're not just becoming a Partner - you're also becoming a freedom fighter in the battle for privacy! Earn 25% Affiliate Commission <a href="https://aesirx.io/partner?utm_source=wpplugin&utm_medium=web&utm_campaign=wordpress&utm_id=aesirx&utm_term=wordpress&utm_content=analytics">[Click to Join]</a>
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: aesirx.io
  * Author URI: https://aesirx.io/
  * Domain Path: /languages
@@ -60,7 +60,7 @@ add_action('wp_enqueue_scripts', function (): void {
         'aesirx-consent',
         plugins_url('assets/vendor/consent-loader.global.js', __FILE__),
         [],
-        '1.0.0',
+        '1.0.1',
     true
     );
 
@@ -76,7 +76,7 @@ add_action('wp_enqueue_scripts', function (): void {
         'aesirx-consent',
         plugins_url($cssFile, __FILE__),
         [],
-        '1.0.0',
+        '1.0.1',
         'all'
     );
     wp_enqueue_style('aesirx-consent');
@@ -166,10 +166,10 @@ add_action('wp_enqueue_scripts', function (): void {
         "txt_cookie_declaration" => __( "Cookie Declaration", 'aesirx-consent' )
     );
     wp_localize_script( 'aesirx-consent', 'aesirx_analytics_translate', $translation_array );
-
+    $origin = wp_parse_url( home_url(), PHP_URL_SCHEME ) . '://' . wp_parse_url( home_url(), PHP_URL_HOST );
     $domain =
         ($options['storage'] ?? 'internal') === 'internal'
-            ? get_bloginfo('url')
+            ? $origin
             : rtrim($options['domain'] ?? '', '/');
 
     $trackEcommerce = ($options['track_ecommerce'] ?? 'true') === 'true' ? 'true': 'false';
